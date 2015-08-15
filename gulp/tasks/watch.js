@@ -13,8 +13,8 @@ var config = require('../config');
 
 // This is the watch task itself.
 var watchTask = function () {
-	gulp.watch(config.watch.server, ['server']);
-	gulp.watch(config.watch.client, ['browserify']);
+	gulp.watch(config.watch.serverFiles, ['server']);
+	gulp.watch(config.watch.clientFiles, ['browserify']);
 };
 
 // Register the task.  This names the task ('watch'), specifies dependencies
