@@ -1,6 +1,6 @@
 {
   "name": "jstogether",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Helper site for jstogether group",
   "main": "server.js",
   "scripts": {
@@ -19,5 +19,6 @@
   "homepage": "https://github.com/jstogether/jstogether#readme",
   "dependencies": {
     "express": "^4.13.3"
-  }
+  },
+  "devDependencies": {}
 }
