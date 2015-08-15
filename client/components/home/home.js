@@ -1,3 +1,4 @@
+var projectView = require('../projectView/projectView');
 
 var HomeController = function($state){
     var homeCtrl = this;
@@ -7,3 +8,5 @@ var HomeController = function($state){
 
 angular.module('app.home', [])
     .controller("HomeController", HomeController);
+
+module.exports = HomeController;

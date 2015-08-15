@@ -1,7 +1,5 @@
-/*
-Created by josh
- */
-
+var createGroup = require('./createGroup/createGroup');
+var joinGroup = require('./joinGroup/joinGroup');
 
 var GroupViewController = function(){
     var gvCtrl = this;
@@ -10,3 +8,5 @@ var GroupViewController = function(){
 
 angular.module('app.projectview.groupview', [])
     .controller('GroupViewController', GroupViewController);
+
+module.exports = GroupViewController;

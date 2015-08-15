@@ -5,3 +5,5 @@ var SoloViewController = function(){
 
 angular.module('app.projectview.soloview', [])
     .controller('SoloViewController', SoloViewController);
+
+module.exports = SoloViewController;

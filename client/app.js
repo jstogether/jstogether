@@ -1,6 +1,8 @@
 var angular = require('angular');
 var angularUiRouter = require('ui-router');
 
+var homeView = require('./components/home/home');
+
 var AppController = function() {
     console.log("AppCtrl instantiated");
     var appCtrl = this;
