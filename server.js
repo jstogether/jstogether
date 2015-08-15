@@ -6,7 +6,7 @@ var express = require('express');
 var app = express();
 
 app.set('port', (process.env.PORT || 80));
-app.set('host', (process.env.HOST || '0.0.0.0'));
+app.set('host', (process.env.IP || '0.0.0.0'));
 
 app.use(express.static(__dirname + '/client'));
 
