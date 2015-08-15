@@ -6,8 +6,7 @@ module.exports = {
         debug: true,
         entries: './client/app.js',
         outputFilename: 'bundle.js',
-        outputPath: './client',
-        transform: ['deamdify']
+        outputPath: './client'
     },
     
     /**
