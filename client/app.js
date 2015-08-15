@@ -1,10 +1,13 @@
+var angular = require('angular');
+var angularUiRouter = require('ui-router');
+
 var AppController = function() {
     console.log("AppCtrl instantiated");
     var appCtrl = this;
     
     this.title = "jstogether";
 };
-// pie
+
 
 angular.module('app', [
     'ui.router',
