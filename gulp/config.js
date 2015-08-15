@@ -9,7 +9,8 @@ module.exports = {
             './client/bundle.js'
         ],
         outputFilename: 'bundle.js',
-        outputPath: './client'
+        outputPath: './client',
+        transform: ['deamdify']
     },
     
     /**
