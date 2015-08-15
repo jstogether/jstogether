@@ -1,9 +1,11 @@
 
-var ProjectViewController = function (){
+var ProjectViewController = function ($state){
+    var pvCtrl = this;
 
+    pvCtrl.state = $state;
 };
 
-angular.module('app.projectView', [
-    'app.projectView.groupView',
-    'app.projectView.soloView'])
+angular.module('app.projectview', [
+    'app.projectview.groupview',
+    'app.projectview.soloview'])
     .controller('ProjectViewController', ProjectViewController);
