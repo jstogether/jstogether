@@ -8,6 +8,7 @@ var AppController = function() {
 
 angular.module('app', [
     'ui.router',
+    'app.home'
     ])
     .controller("AppController", AppController)
     .config(function routeConfiguration($stateProvider, $urlRouterProvider){
@@ -15,8 +16,16 @@ angular.module('app', [
             .state('home', {
                 url: '/home',
                 templateUrl:'components/home/home.html'
+            })
+            .state('projectview', {
+                url: '/projects',
+                templateUrl:'components/projectView/projectView.html',
+                abstract: true
+        })
+            .state('projectview.soloView', {
+                url: '/solo',
+                templateUrl: 'components/projectView/soloView/soloView.js'
             });
-            
         $urlRouterProvider.otherwise('/home')
             
             
