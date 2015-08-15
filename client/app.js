@@ -20,7 +20,6 @@ angular.module('app', [
             .state('projectview', {
                 url: '/projects',
                 templateUrl:'components/projectView/projectView.html',
-                abstract: true
         })
             .state('projectview.soloView', {
                 url: '/solo',
