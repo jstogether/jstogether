@@ -5,9 +5,6 @@ module.exports = {
     browserify: {
         debug: true,
         entries: './client/app.js',
-        exclude: [
-            './client/bundle.js'
-        ],
         outputFilename: 'bundle.js',
         outputPath: './client',
         transform: ['deamdify']
@@ -18,7 +15,8 @@ module.exports = {
      */
     watch: {
         clientFiles: [
-            './client/**/*'
+            './client/**/*',
+            '!./client/bundle.js'
         ],
         serverFiles: [
             './server.js'
