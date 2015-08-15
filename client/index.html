@@ -7,19 +7,16 @@
 </head>
 <body ng-app="app" ng-controller="AppController as appCtrl">
 
-    <h1>{{appCtrl.title}}</h1>
-    
+
+<div>
+    <div ui-view></div>
+</div>
+
     <!--Third Party Dependencies-->
     <script src='bower_components/ui-router/release/angular-ui-router.js'></script>
     
     <!--Client Dependencies-->
-    <script src="app.js"></script>
-    <script src="components/home/home.js"></script>
-    <script src="components/projectView/projectView.js"></script>
-    <script src="components/projectView/soloView/soloView.js"></script>
-    <script src="components/projectView/groupView/groupView.js"></script>
-    <script src="components/projectView/groupView/creategroup/creategroup.js"></script>
-    <script src="components/projectView/groupView/joingroup/joingroup.js"></script>
+    <script src="bundle.js"></script>
     
 </body>
 </html>
