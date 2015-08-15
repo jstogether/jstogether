@@ -1,6 +1,8 @@
 
-var HomeController = function(){
-    
+var HomeController = function($state){
+    var homeCtrl = this;
+
+    homeCtrl.state = $state;
 };
 
 angular.module('app.home', [])

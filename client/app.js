@@ -11,7 +11,8 @@ var AppController = function() {
 
 angular.module('app', [
     'ui.router',
-    'app.home'
+    'app.home',
+    'app.projectview'
     ])
     .controller("AppController", AppController)
     .config(function routeConfiguration($stateProvider, $urlRouterProvider){
@@ -22,8 +23,7 @@ angular.module('app', [
             })
             .state('projectview', {
                 url: '/projects',
-                templateUrl:'components/projectView/projectView.html',
-                abstract: true
+                templateUrl:'components/projectView/projectView.html'
         })
             .state('projectview.soloView', {
                 url: '/solo',

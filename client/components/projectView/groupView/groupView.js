@@ -3,10 +3,10 @@ Created by josh
  */
 
 
-var ProjectViewController = function(){
-    var pvCtrl = this;
+var GroupViewController = function(){
+    var gvCtrl = this;
 
 };
 
-angular.module('app.projectview', [])
-    .controller('ProjectViewController', ProjectViewController);
+angular.module('app.projectview.groupview', [])
+    .controller('GroupViewController', GroupViewController);
