@@ -1,4 +1,4 @@
-var soloView = require('./soloView/soloview');
+var soloView = require('./soloView/soloView');
 var groupView = require('./groupView/groupView');
 
 var ProjectViewController = function ($state){
