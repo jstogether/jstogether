@@ -4,6 +4,8 @@ var angularUiRouter = require('ui-router');
 var homeView = require('./components/home/home');
 var groupView = require('./components/groupview/groupview');
 var soloView = require('./components/soloview/soloview');
+var projectView = require('./components/common/directives/projectList/projectList');
+
 
 var AppController = function() {
     console.log("AppCtrl instantiated");
@@ -17,7 +19,8 @@ angular.module('app', [
     'ui.router',
     'app.home',
     'app.soloview',
-    'app.groupview'
+    'app.groupview',
+    'app.directives.projectlist'
     ])
     .controller("AppController", AppController)
     .config(function routeConfiguration($stateProvider, $urlRouterProvider){

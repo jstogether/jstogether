@@ -3,7 +3,7 @@ components (D)
 --home.js
 --home.html
 -projectView (D)
---projectView.js
+--projectList.js
 --projectView.html
 --groupView (D)
 ----groupView.html

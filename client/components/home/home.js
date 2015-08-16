@@ -1,4 +1,4 @@
-var projectView = require('../common/directives/projectView/projectView');
+
 
 var HomeController = function($state){
     var homeCtrl = this;
