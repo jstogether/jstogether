@@ -1,9 +1,6 @@
 
-
-
 var ProjectViewController = function ($state){
     var pvCtrl = this;
-    console.log("PVCtrl init")
     pvCtrl.state = $state;
 };
 

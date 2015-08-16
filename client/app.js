@@ -5,6 +5,8 @@ var homeView = require('./components/home/home');
 var groupView = require('./components/groupview/groupview');
 var soloView = require('./components/soloview/soloview');
 var projectView = require('./components/common/directives/projectList/projectList');
+var joinGroup = require('./components/groupView/joinGroup/joinGroup');
+var createGroup = require('./components/groupView/createGroup/createGroup');
 
 
 var AppController = function() {
@@ -14,12 +16,13 @@ var AppController = function() {
     this.title = "jstogether";
 };
 
-
 angular.module('app', [
     'ui.router',
     'app.home',
     'app.soloview',
     'app.groupview',
+    'app.groupview.joingroup',
+    'app.groupview.creategroup',
     'app.directives.projectlist'
     ])
     .controller("AppController", AppController)
@@ -33,10 +36,19 @@ angular.module('app', [
                 url: '/group',
                 templateUrl:'components/groupView/groupView.html'
         })
+            .state('groupview.creategroup', {
+                url: '/create',
+                templateUrl:'components/groupView/createGroup/createGroup.html'
+            })
+            .state('groupview.joingroup', {
+                url: '/join',
+                templateUrl:'components/groupView/joinGroup/joinGroup.html'
+            })
             .state('soloview', {
                 url: '/solo',
                 templateUrl: 'components/soloView/soloView.html'
             });
+
         $urlRouterProvider.otherwise('/home')
             
             
