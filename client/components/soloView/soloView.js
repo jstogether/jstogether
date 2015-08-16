@@ -3,7 +3,7 @@ var SoloViewController = function(){
 
 };
 
-angular.module('app.projectview.soloview', [])
+angular.module('app.soloview', [])
     .controller('SoloViewController', SoloViewController);
 
 module.exports = SoloViewController;

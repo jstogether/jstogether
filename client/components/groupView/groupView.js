@@ -6,7 +6,7 @@ var GroupViewController = function(){
 
 };
 
-angular.module('app.projectview.groupview', [])
+angular.module('app.groupview', [])
     .controller('GroupViewController', GroupViewController);
 
 module.exports = GroupViewController;
