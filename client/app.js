@@ -24,33 +24,30 @@ angular.module('app', [
     'app.groupview.joingroup',
     'app.groupview.creategroup',
     'app.directives.projectlist'
-    ])
-    .controller("AppController", AppController)
-    .config(function routeConfiguration($stateProvider, $urlRouterProvider){
-        $stateProvider
-            .state('home', {
-                url: '/home',
-                templateUrl:'components/home/home.html'
-            })
-            .state('groupview', {
-                url: '/group',
-                templateUrl:'components/groupView/groupView.html'
-        })
-            .state('groupview.creategroup', {
-                url: '/create',
-                templateUrl:'components/groupView/createGroup/createGroup.html'
-            })
-            .state('groupview.joingroup', {
-                url: '/join',
-                templateUrl:'components/groupView/joinGroup/joinGroup.html'
-            })
-            .state('soloview', {
-                url: '/solo',
-                templateUrl: 'components/soloView/soloView.html'
-            });
-
-        $urlRouterProvider.otherwise('/home')
-            
-            
-            
+])
+.controller("AppController", AppController)
+.config(function routeConfiguration ($stateProvider, $urlRouterProvider) {
+    $stateProvider
+    .state('home', {
+        url: '/home',
+        templateUrl:'components/home/home.html'
+    })
+    .state('groupview', {
+        url: '/group',
+        templateUrl:'components/groupView/groupView.html'
+    })
+    .state('groupview.creategroup', {
+        url: '/create',
+        templateUrl:'components/groupView/createGroup/createGroup.html'
+    })
+    .state('groupview.joingroup', {
+        url: '/join',
+        templateUrl:'components/groupView/joinGroup/joinGroup.html'
+    })
+    .state('soloview', {
+        url: '/solo',
+        templateUrl: 'components/soloView/soloView.html'
     });
+
+    $urlRouterProvider.otherwise('/home')
+});
