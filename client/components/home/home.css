@@ -20,7 +20,7 @@ button.project-button {
 	text-decoration: none;
 	text-shadow:0px 1px 0px #fff;
 	width: 145px;
-	margin:0px auto;
+	margin:0px;
 	box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
 	-webkit-transition:box-shadow 0.5s;
 }
