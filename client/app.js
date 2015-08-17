@@ -2,8 +2,8 @@ var angular = require('angular');
 var angularUiRouter = require('ui-router');
 
 var homeView = require('./components/home/home');
-var groupView = require('./components/groupview/groupview');
-var soloView = require('./components/soloview/soloview');
+var groupView = require('./components/groupView/groupView');
+var soloView = require('./components/soloView/soloView');
 var projectView = require('./components/common/directives/projectList/projectList');
 var joinGroup = require('./components/groupView/joinGroup/joinGroup');
 var createGroup = require('./components/groupView/createGroup/createGroup');
