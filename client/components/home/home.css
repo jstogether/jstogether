@@ -7,6 +7,10 @@
 	margin: 2em;
 }
 
+.content button.project-button {
+	margin: 0 auto;
+}
+
 button.project-button {
 	display: block;
 	border:1px solid #a7a7a7;
