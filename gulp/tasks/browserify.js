@@ -1,4 +1,3 @@
-
 import gulp from 'gulp';
 import browserify from 'browserify';
 import {browserify as config} from '../config';
