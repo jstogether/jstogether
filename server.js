@@ -1,5 +1,5 @@
 // Register babel transpiler so ES6 modules can be imported
-require('babel-core/register')();
+require('babel-core').register();
 
 var path = require('path');
 var express = require('express');
