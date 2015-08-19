@@ -7,7 +7,7 @@ import ProjectApi from '../api/project';
 
 export default {
 	/**
-	 *
+	 * Global
 	 */
 	dumpStore (store) {
 		AppDispatcher.dispatch({
@@ -37,7 +37,7 @@ export default {
 	},
 	
 	/**
-	 *
+	 * Session
 	 */
 	login (credentials) {
 		AppDispatcher.dispatch({
@@ -75,7 +75,7 @@ export default {
 	},
 
 	/**
-	 *
+	 * Projects
 	 */
 	fetchProjects () {
 		AppDispatcher.dispatch({
@@ -122,5 +122,27 @@ export default {
 		ProjectApi.deleteProject(projectId)
 		.done(ServerActions.deleteProjectSuccess)
 		.fail(ServerActions.deleteProjectFail);
+	},
+
+	/**
+	 * Users
+	 */
+	fetchUsers () {
+		AppDispatcher.dispatch({
+			actionType: Constant.FETCH_USERS_ATTEMPT
+		});
+
+		UserApi.fetchUsers()
+		.done(ServerActions.fetchUsersSuccess);
+	},
+
+	/**
+	 *
+	 */
+	selectUser (user) {
+		AppDispatcher.dispatch({
+			actionType: Constant.SELECT_USER,
+			user
+		});
 	}
 };
