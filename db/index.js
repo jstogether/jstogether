@@ -5,11 +5,19 @@ import ProjectSchema from './schema/project';
 
 import config from '../config';
 
-let connection = mongoose.createConnection(
-	config.get('database:host'),
-	config.get('database:name'),
-	config.get('database:port')
-);
+let uri = process.env.MONGOLAB_URI;
+let connection;
+
+if (uri) {
+	connection = mongoose.connect(uri);
+}
+else {
+	connection = mongoose.createConnection(
+		config.get('database:host'),
+		config.get('database:name'),
+		config.get('database:port')
+	);
+}
 
 connection.model('User', UserSchema);
 connection.model('Project', ProjectSchema);
