@@ -4,8 +4,8 @@
 		"port": 8080
 	},
 	"database": {
-		"host": "127.0.0.1",
-		"port": 27017,
-		"name": "jstogether-tools"
+		"host": "ds033163.mongolab.com",
+		"port": 33163,
+		"name": "heroku_kg7p9kls"
 	}
 }
