@@ -1,24 +1,52 @@
-module.exports = {
-    /**
-     * Configuration for the browserify build step
-     */
-    browserify: {
-        debug: true,
-        entries: './client/app.js',
-        outputFilename: 'bundle.js',
-        outputPath: './client'
-    },
-    
-    /**
-     * Globs indicating what to watch for changes
-     */
-    watch: {
-        clientFiles: [
-            './client/**/*',
-            '!./client/bundle.js'
-        ],
-        serverFiles: [
-            './server.js'
-        ]
-    }
-};
+let destination = './public';
+
+export default {
+	/**
+	 *
+	 */
+	browserify: {
+		debug: true,
+		outputName: 'bundle.js',
+		entries: './app.js',
+		extensions: ['.js'],
+		transform: ['babelify'],
+		watch: [
+			'./api/**/*',
+			'./component/**/*',
+			'./action/**/*',
+			'./constant/**/*',
+			'./dispatcher/**/*',
+			'./store/**/*',
+			'./app.js',
+			'./util/**/*'
+		]
+	},
+
+	/**
+	 *
+	 */
+	sass: {
+		watch: './sass/**/*.{sass,scss}',
+		dest: destination + '/css',
+		settings: {
+			outputStyle: 'nested'
+			// https://github.com/sass/node-sass#options
+		}
+	},
+
+	/**
+	 *
+	 */
+	server: {
+		execute: 'server.js',
+		watch: [
+			'./public/bundle.js',
+			'./db/**/*',
+			'./middleware/**/*',
+			'./router/**/*',
+			'./app.js',
+			'./server.js',
+			'./auth.js'
+		]
+	}
+}

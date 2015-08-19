@@ -6,6 +6,7 @@
 
 - [git](https://git-scm.com/)
 - [nodejs](https://nodejs.org/)
+- [mongodb](https://www.mongodb.org/downloads)
 
 ### Setup for development
 

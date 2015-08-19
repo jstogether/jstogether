@@ -1,19 +1,25 @@
-/**
- * Created by Joshua on 8/15/2015.
- */
+// Register babel transpiler so ES6 modules can be imported
+require('babel-core/register')();
 
+var path = require('path');
 var express = require('express');
 var app = express();
+var config = require('./config');
 
-app.set('port', (process.env.PORT || 80));
-app.set('host', (process.env.IP || '0.0.0.0'));
+var host = config.get('server:host');
+var port = config.get('server:port');
 
-app.use(express.static(__dirname + '/client'));
+var db = require('./db');
+app.use(express.static(path.join(__dirname, 'public'), {
+	index: false
+}));
 
-app.get('/', function(request, response) {
-    response.render('/client/index.html')
-});
+app.set('views', path.join(__dirname, 'view'));
+app.set('view engine', 'ejs');
 
-app.listen(app.get('port'), app.get('host'), function(){
-    console.log('Listening on port ' + app.get('port'));
+require('./middleware')(app);
+require('./router')(app);
+
+module.exports = app.listen(port, host, function () {
+	console.log('Listening! ', host + ':' + port);
 });
