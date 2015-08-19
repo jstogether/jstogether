@@ -55,14 +55,12 @@ export default class Login extends Component {
 					ref='username'
 					className='login'
 					placeholder='Username'
-					value='Dave'
 					onChange={this.onUsernameChange} />
 				<input
 					type='password'
 					ref='password'
 					className='password'
 					placeholder='Password'
-					value='abcd'
 					onChange={this.onPasswordChange} />
 				<br />
 
@@ -83,11 +81,6 @@ export default class Login extends Component {
 			e.stopPropagation();
 			return this.onLoginClick();
 		}
-
-		this.setState({
-			username: React.findDOMNode(this.refs.username).value,
-			password: React.findDOMNode(this.refs.password).value
-		});
 	}
 
 	/**
