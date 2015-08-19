@@ -9,6 +9,11 @@ var config = require('./config');
 var host = config.get('server:host');
 var port = config.get('server:port');
 
+port = process.env.PORT;
+
+console.log(process.env.HOST);
+console.log(process.env.PORT);
+
 var db = require('./db');
 app.use(express.static(path.join(__dirname, 'public'), {
 	index: false
