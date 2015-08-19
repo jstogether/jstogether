@@ -4,34 +4,7 @@ import Component from './component';
 import Navigation from './navigation';
 import UserInfo from './userInfo';
 
-import UserStore from '../store/user';
-
 export default class Header extends Component {
-	/**
-	 *
-	 */
-	constructor () {
-		super();
-
-		this._bind('onUserStoreChange');
-
-		this.state = UserStore.getAll();
-	}
-
-	/**
-	 *
-	 */
-	componentDidMount () {
-		UserStore.addChangeListener(this.onUserStoreChange);
-	}
-
-	/**
-	 *
-	 */
-	componentWillUnmount () {
-		UserStore.removeChangeListener(this.onUserStoreChange);
-	}
-
 	/**
 	 *
 	 */
@@ -49,12 +22,5 @@ export default class Header extends Component {
 				</div>
 			</header>
 		);
-	}
-
-	/**
-	 *
-	 */
-	onUserStoreChange () {
-		this.setState(UserStore.getAll());
 	}
 }
