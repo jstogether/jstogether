@@ -60,7 +60,9 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 router.all('/logout', (req, res) => {
 	req.logout();
-	res.sendStatus(200);
+	res.send({
+		logout: true
+	});
 });
 
 export default router;
