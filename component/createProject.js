@@ -11,7 +11,12 @@ export default class CreateProject extends Component {
 	constructor () {
 		super();
 
-		this._bind('onNameChange', 'onScopeChange', 'onValueChange', 'onCreateProject');
+		this._bind(
+			'onNameChange',
+			'onScopeChange',
+			'onValueChange',
+			'onCreateProject'
+		);
 
 		this.state = {
 			name: '',
@@ -30,8 +35,15 @@ export default class CreateProject extends Component {
 					<tbody>
 						<tr>
 							<td><label htmlFor='projectName'>{'Name:'}</label></td>
-							<td><input name='projectName' type='text' placeholder='Project Name' onChange={this.onNameChange} /></td>
+							<td>
+								<input
+									name='projectName'
+									type='text'
+									placeholder='Project Name'
+									onChange={this.onNameChange} />
+							</td>
 						</tr>
+
 						<tr>
 							<td><label htmlFor='scope'>{'Scope:'}</label></td>
 							<td>
@@ -45,9 +57,17 @@ export default class CreateProject extends Component {
 								</RadioGroup>
 							</td>
 						</tr>
+						
 						<tr>
 							<td><label htmlFor='projectValue'>{'Value:'}</label></td>
-							<td><input ref='projectValue' name='projectValue' type='text' placeholder='Project Value' onChange={this.onValueChange} /></td>
+							<td>
+								<input
+									ref='projectValue'
+									name='projectValue'
+									type='text'
+									placeholder='Project Value'
+									onChange={this.onValueChange} />
+							</td>
 						</tr>
 					</tbody>
 				</table>
