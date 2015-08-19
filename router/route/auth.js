@@ -51,6 +51,8 @@ router.post('/register', (req, res) => {
 		console.log('User craeted ', !!err, !!user);
 		if (err) {
 			console.log('errcode: ', err.code);
+			console.log(err);
+			console.log(err.message);
 			let status = err.code === 11000 ? 409 : 500;
 			return res.sendStatus(status);
 		}
@@ -59,27 +61,6 @@ router.post('/register', (req, res) => {
 			res.send(user.toClient());
 		});
 	});
-
-/*
-
-	User.get(req.body.username, (err, user) => {
-		if (err) return res.send(500, err);
-		if (user) return res.send(409);
-
-		user = new User({
-			username: req.body.username,
-			password: req.body.password
-		});
-
-		user.save(err => {
-			if (err) return res.send(500, err);
-
-			passport.authenticate('local')(req, res, () => {
-				res.send(user.toClient());
-			});
-		});
-	});
-*/
 });
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
