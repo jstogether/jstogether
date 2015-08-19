@@ -3,7 +3,7 @@ import Component from './component';
 
 import AppActions from '../action/app';
 
-import UserStore from '../store/user';
+import SessionStore from '../store/session';
 
 export default class Login extends Component {
 	/**
@@ -16,15 +16,15 @@ export default class Login extends Component {
 			'onKeyUp',
 			'onLoginClick',
 			'onRegisterClick',
-			'onUserStoreChange',
+			'onStoreChange',
 			'onUsernameChange',
 			'onPasswordChange'
 		);
 
 		this.state = {
-			username: 'Dave',
-			password: 'abcd',
-			err: null
+			username: null,
+			password: null,
+			errorMessage: null
 		};
 	}
 
@@ -32,21 +32,25 @@ export default class Login extends Component {
 	 *
 	 */
 	componentDidMount () {
-		UserStore.addChangeListener(this.onUserStoreChange);
+		SessionStore.addChangeListener(this.onStoreChange);
 	}
 
 	/**
 	 *
 	 */
 	componentWillUnmount () {
-		UserStore.removeChangeListener(this.onUserStoreChange);
+		SessionStore.removeChangeListener(this.onStoreChange);
 	}
 
 	/**
 	 *
 	 */
 	render () {
-		let err = this.state.err ? <span className='error'>{this.state.err}</span> : null;
+		let err;
+
+		if (this.state.errorMessage) {
+			err = <span className='error'>{this.state.errorMessage}</span>
+		}
 
 		return (
 			<div className='loginForm' onKeyUp={this.onKeyUp}>
@@ -64,8 +68,8 @@ export default class Login extends Component {
 					onChange={this.onPasswordChange} />
 				<br />
 
-				<button onClick={this.onLoginClick} className='login'>{'Login'}</button>
-				<button onClick={this.onRegisterClick} className='register'>{'Register'}</button>
+				<button className='login' onClick={this.onLoginClick}>{'Login'}</button>
+				<button className='register' onClick={this.onRegisterClick}>{'Register'}</button>
 				<br />
 				{err}
 			</div>
@@ -124,9 +128,9 @@ export default class Login extends Component {
 	/**
 	 *
 	 */
-	onUserStoreChange () {
+	onStoreChange () {
 		this.setState({
-			err: UserStore.getError()
+			errorMessage: SessionStore.getError()
 		});
 	}
 }
