@@ -15,6 +15,10 @@ let json = 'application/json; charset=utf-8';
 
 $.ajaxSetup({
 	contentType: json,
+	accepts: {
+		json: 'application/json'
+	},
+	dataType: 'json',
 	processData: false,
 	beforeSend (req, options) {
 		// This ensures that requests using JSON stringify their content before sending
