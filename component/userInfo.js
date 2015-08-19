@@ -2,7 +2,14 @@ import React from 'react'
 import Component from './component';
 
 import AppActions from '../action/app';
-import UserStore from '../store/user';
+import SessionStore from '../store/session';
+
+function getState () {
+	return {
+		user: SessionStore.getUser(),
+		loggedIn: SessionStore.isLoggedIn()
+	};
+}
 
 export default class UserInfo extends Component {
 	/**
@@ -11,23 +18,27 @@ export default class UserInfo extends Component {
 	constructor () {
 		super();
 
-		this._bind('onChange', 'onLogoutClick');
+		this._bind(
+			'onStoreChange',
+			'onLogoutClick',
+			'onUsernameClick'
+		);
 
-		this.state = UserStore.getAll();
+		this.state = getState();
 	}
 
 	/**
 	 *
 	 */
 	componentDidMount () {
-		UserStore.addChangeListener(this.onChange);
+		SessionStore.addChangeListener(this.onStoreChange);
 	}
 
 	/**
 	 *
 	 */
 	componentWillUnmount () {
-		UserStore.removeChangeListener(this.onChange);
+		SessionStore.removeChangeListener(this.onStoreChange);
 	}
 
 	/**
@@ -39,7 +50,7 @@ export default class UserInfo extends Component {
 		if (this.state.loggedIn) {
 			content = (
 				<span key='username' className='username'>
-					{this.state.username + ' '}
+					<span className='username' onClick={this.onUsernameClick}>{this.state.user.username + ' '}</span>
 					<span className='logoutButton' onClick={this.onLogoutClick}>{'(logout)'}</span>
 				</span>
 			);
@@ -62,7 +73,15 @@ export default class UserInfo extends Component {
 	/**
 	 *
 	 */
-	onChange () {
-		this.setState(UserStore.getAll());
+	onUsernameClick () {
+		AppActions.selectUser(this.state.user);
+		AppActions.navigate('users');
+	}
+	
+	/**
+	 *
+	 */
+	onStoreChange () {
+		this.setState(SessionStore.getAll());
 	}
 }
