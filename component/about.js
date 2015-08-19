@@ -7,7 +7,7 @@ export default class About extends Component {
 	 */
 	render () {
 		return (
-			<div>
+			<div className={'pageContainer'}>
 				<h1>{'About'}</h1>
 				<p>{'Cool description about jstogether'}</p>
 			</div>
