@@ -4,17 +4,16 @@ import Component from './component';
 
 import AppActions from '../action/app';
 import AppStore from '../store/app';
-import UserStore from '../store/user';
 
 import Header from './header';
 import Login from './login';
 import About from './about';
 import Projects from './projects';
+import Users from './users';
 
 function getState () {
 	return {
-		page: AppStore.getPage(),
-		user: UserStore.getAll()
+		page: AppStore.getPage()
 	};
 }
 
@@ -25,7 +24,7 @@ export default class App extends Component {
 	constructor () {
 		super();
 
-		this._bind('onAppStoreUpdate');
+		this._bind('onStoreUpdate');
 
 		this.state = getState();
 	}
@@ -34,14 +33,14 @@ export default class App extends Component {
 	 *
 	 */
 	componentDidMount () {
-		AppStore.addChangeListener(this.onAppStoreUpdate);
+		AppStore.addChangeListener(this.onStoreUpdate);
 	}
 
 	/**
 	 *
 	 */
 	componentWillUnmount () {
-		AppStore.removeChangeListener(this.onAppStoreUpdate);
+		AppStore.removeChangeListener(this.onStoreUpdate);
 	}
 
 	/**
@@ -62,6 +61,11 @@ export default class App extends Component {
 				<About />
 			);
 		break;
+		case 'users':
+			content = (
+				<Users />
+			);
+		break;
 		case 'login':
 		default:
 			content = (
@@ -72,7 +76,7 @@ export default class App extends Component {
 
 		return (
 			<div className='content'>
-				<Header user={this.state.user} page={this.state.page} />
+				<Header page={this.state.page} />
 
 				{content}
 			</div>
@@ -82,7 +86,7 @@ export default class App extends Component {
 	/**
 	 *
 	 */
-	onAppStoreUpdate () {
+	onStoreUpdate () {
 		this.setState(getState());
 	}
 }
