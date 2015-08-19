@@ -25,7 +25,14 @@ class ProjectStore extends Store {
 	/**
 	 *
 	 */
-	onSelectCurrentProject (project) {
+	getProjects () {
+		return this.data.projects;
+	}
+	
+	/**
+	 *
+	 */
+	onSelectProject (project) {
 		this.data.currentProject = project;
 		this.emitChange();
 	}
@@ -59,6 +66,13 @@ class ProjectStore extends Store {
 			}
 		}
 	}
+
+	/**
+	 *
+	 */
+	onLogout () {
+		this.data.currentProject = null;
+	}
 };
 
 let projectStore = new ProjectStore();
@@ -70,8 +84,11 @@ AppDispatcher.register((action) => {
 			projectStore.dumpToConsole();
 		}
 	break;
+	case Constant.LOGOUT_SUCCESS:
+		projectStore.onLogout();
+	break;
 	case Constant.SELECT_PROJECT:
-		projectStore.onSelectCurrentProject(action.project);
+		projectStore.onSelectProject(action.project);
 	break;
 	case Constant.FETCH_PROJECTS_SUCCESS:
 		projectStore.onFetchProjectsSuccess(action.projects);

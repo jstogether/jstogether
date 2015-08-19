@@ -7,6 +7,7 @@ import AppActions from '../action/app';
 // initialise stores
 import UserStore from './user';
 import ProjectStore from './project';
+import SessionStore from './session';
 
 class AppStore extends Store {
 	/**
@@ -31,7 +32,7 @@ class AppStore extends Store {
 	 *
 	 */
 	onNavigate (page) {
-		if (UserStore.getAll().loggedIn) {
+		if (SessionStore.isLoggedIn()) {
 			this.data.page = page;
 			this.emitChange();
 		}
@@ -40,10 +41,12 @@ class AppStore extends Store {
 	/**
 	 *
 	 */
-	onLoginSuccess () {
+	onLoginSuccess (user) {
 		this.data.page = 'projects';
 
+		// this needs to be done properly
 		setTimeout(AppActions.fetchProjects);
+		setTimeout(AppActions.fetchUsers);
 
 		this.emitChange();
 	}
@@ -52,7 +55,8 @@ class AppStore extends Store {
 	 *
 	 */
 	onLogoutSuccess () {
-		this.data.page = 'home';
+		this.data.page = 'login';
+
 		this.emitChange();
 	}
 };
@@ -70,7 +74,7 @@ AppDispatcher.register((action) => {
 		appStore.onNavigate(action.page);
 	break;
 	case Constant.LOGIN_SUCCESS:
-		appStore.onLoginSuccess();
+		appStore.onLoginSuccess(action.user);
 	break;
 	case Constant.LOGOUT_SUCCESS:
 		appStore.onLogoutSuccess();
