@@ -49,7 +49,6 @@ export default class App extends Component {
 	 */
 	render () {
 		let content;
-		console.log('rendering ' + this.state.page);
 
 		switch (this.state.page) {
 		case 'projects':
