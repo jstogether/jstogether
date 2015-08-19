@@ -10,9 +10,9 @@ export default class Navigation extends Component {
 	render () {
 		return (
 			<div className='navigation'>
-				<span onClick={this.onNavigate('home')}>{'Home'}</span>
 				<span onClick={this.onNavigate('projects')}>{'Projects'}</span>
 				<span onClick={this.onNavigate('users')}>{'Users'}</span>
+				<span onClick={this.onNavigate('about')}>{'About'}</span>
 			</div>
 		);
 	}
