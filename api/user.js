@@ -21,5 +21,12 @@ export default {
 	 */
 	logout () {
 		return $.get('/auth/logout');
+	},
+
+	/**
+	 *
+	 */
+	fetchUsers () {
+		return $.get('/user');
 	}
 }
