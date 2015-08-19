@@ -11,19 +11,38 @@ class UserStore extends Store {
 		super();
 
 		this.data = {
-			username: 'Guest',
-			loggedIn: false,
-			loginError: null
+			currentUser: null,
+			users: []
 		};
 	}
 
 	/**
 	 *
 	 */
-	onLoginSuccess (user) {
-		this.data.username = user.username;
-		this.data.loggedIn = true;
-		this.data.loginError = null;
+	getCurrentUser () {
+		return this.data.currentUser;
+	}
+
+	/**
+	 *
+	 */
+	getUsers () {
+		return this.data.users;
+	}
+
+	/**
+	 *
+	 */
+	onSelectUser (user) {
+		this.data.currentUser = user;
+		this.emitChange();
+	}
+
+	/**
+	 *
+	 */
+	onFetchUsersSuccess (users) {
+		this.data.users = users;
 
 		this.emitChange();
 	}
@@ -31,49 +50,8 @@ class UserStore extends Store {
 	/**
 	 *
 	 */
-	onLoginFail (err) {
-		switch (err.status) {
-		case 401:
-		case 403:
-			this.data.loginError = 'Invalid Username or Password';
-		break;
-		default:
-			this.data.loginError = 'Unknown Error';
-			console.log(err);
-		}
-
-		this.emitChange();
-	}
-
-	/**
-	 *
-	 */
-	onRegisterFail (err) {
-		switch (err.status) {
-		case 409:
-			this.data.loginError = 'User already exists';
-		break;
-		default:
-			this.data.loginError = 'Unknown Error';
-			console.log(err);
-		};
-	}
-
-	/**
-	 *
-	 */
-	onLogoutSuccess () {
-		this.data.username = 'Guest';
-		this.data.loggedIn = false;
-
-		this.emitChange()
-	}
-
-	/**
-	 *
-	 */
-	getError () {
-		return this.data.loginError;
+	onLogout () {
+		this.data.currentUser = null;
 	}
 }
 
@@ -86,17 +64,14 @@ AppDispatcher.register((action) => {
 			userStore.dumpToConsole();
 		}
 	break;
-	case Constant.LOGIN_SUCCESS:
-		userStore.onLoginSuccess(action.user);
-	break;
-	case Constant.LOGIN_FAIL:
-		userStore.onLoginFail(action.err);
-	break;
-	case Constant.REGISTER_FAIL:
-		userStore.onRegisterFail(action.err);
-	break;
 	case Constant.LOGOUT_SUCCESS:
-		userStore.onLogoutSuccess();
+		userStore.onLogout();
+	break;
+	case Constant.SELECT_USER:
+		userStore.onSelectUser(action.user);
+	break;
+	case Constant.FETCH_USERS_SUCCESS:
+		userStore.onFetchUsersSuccess(action.users);
 	break;
 	}
 });
