@@ -17,7 +17,6 @@ export default {
 	 *
 	 */
 	loginFail (err) {
-		console.log('login fail', err);
 		AppDispatcher.dispatch({
 			actionType: Constant.LOGIN_FAIL,
 			err
@@ -27,7 +26,7 @@ export default {
 	/**
 	 *
 	 */
-	registerSuccess (err, user) {
+	registerSuccess (user) {
 		AppDispatcher.dispatch({
 			actionType: Constant.LOGIN_SUCCESS,
 			user
@@ -60,6 +59,16 @@ export default {
 		AppDispatcher.dispatch({
 			actionType: Constant.FETCH_PROJECTS_SUCCESS,
 			projects
+		});
+	},
+
+	/**
+	 *
+	 */
+	fetchUsersSuccess (users) {
+		AppDispatcher.dispatch({
+			actionType: Constant.FETCH_USERS_SUCCESS,
+			users
 		});
 	},
 
