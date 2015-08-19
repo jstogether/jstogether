@@ -38,7 +38,7 @@ UserSchema.methods.toClient = function () {
 		email: this.email
 	};
 
-	return JSON.stringify(user);
+	return user;
 };
 
 /**
