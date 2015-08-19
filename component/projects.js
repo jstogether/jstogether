@@ -7,6 +7,13 @@ import ProjectOverview from './projectOverview';
 
 import ProjectStore from '../store/project';
 
+function getState () {
+	return {
+		currentProject: ProjectStore.getCurrentProject(),
+		projects: ProjectStore.getProjects()
+	};
+}
+
 export default class Projects extends Component {
 	/**
 	 *
@@ -16,7 +23,7 @@ export default class Projects extends Component {
 
 		this._bind('onProjectStoreChange');
 
-		this.state = ProjectStore.getAll();
+		this.state = getState();
 	}
 
 	/**
@@ -39,17 +46,17 @@ export default class Projects extends Component {
 	render () {
 		const projectList = this.state.projects.map((project, i) => {
 			return (
-				<li key={i} className='projectShort' onClick={this.createOnProjectClickHandler(project)}>
+				<li key={i} className='itemShort' onClick={this.createOnProjectClickHandler(project)}>
 					<span>{project.name}</span>
 				</li>
 			);
 		});
 
 		return (
-			<div className='projectsContainer'>
-				<div className='projectListContainer'>
-					<ul className='projectList' onClick={this.onProjectClick}>
-						<li className='rootProject' onClick={this.createOnProjectClickHandler(null)}>
+			<div className='pageContainer'>
+				<div className='listContainer'>
+					<ul className='list' onClick={this.onProjectClick}>
+						<li className='itemShort rootItem' onClick={this.createOnProjectClickHandler(null)}>
 							<span>{'Projects'}</span>
 						</li>
 
@@ -57,7 +64,9 @@ export default class Projects extends Component {
 					</ul>
 				</div>
 
-				<ProjectOverview project={this.state.currentProject} />
+				<div className={'contentContainer'}>
+					<ProjectOverview project={this.state.currentProject} />
+				</div>
 			</div>
 		);
 	}
@@ -66,7 +75,7 @@ export default class Projects extends Component {
 	 *
 	 */
 	onProjectStoreChange () {
-		this.setState(ProjectStore.getAll());
+		this.setState(getState());
 	}
 
 	/**
