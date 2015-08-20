@@ -50,6 +50,7 @@ class ProjectStore extends Store {
 	 */
 	onCreateProjectSuccess (project) {
 		this.data.projects.push(project);
+		this.data.currentProject = project;
 		this.emitChange();
 	}
 
@@ -100,6 +101,9 @@ AppDispatcher.register((action) => {
 	break;
 	case Constant.LOGOUT_SUCCESS:
 		projectStore.onLogout();
+	break;
+	case Constant.SHOW_CREATE_PROJECT:
+		projectStore.onSelectProject('createNew');
 	break;
 	case Constant.SELECT_PROJECT:
 		projectStore.onSelectProject(action.project);
