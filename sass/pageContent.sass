@@ -5,32 +5,16 @@
 	right: 20px
 	top: 100px
 
-.pageContainer > div
+.pageContainer > *
 	height: 100%
 	float: left
 	border: 1px solid black
-
-.listContainer
-	border-radius: 6px 0 0 6px
-	width: 15%
-	background-color: white
+	overflow-y: auto
 
 .contentContainer
 	width: calc(85% - 3px)
 	border-radius: 0 6px 6px 0
 	border-left: none!important
 
-.list
-	list-style-type: none
-	text-align: left
-	padding-left: 0
-
-	li
-		padding: 10px
-		border-bottom: 1px solid black
-
-		&:first-child
-			font-weight: bold
-
-		&:last-child
-			border-bottom: none
+.editing 
+	outline: 1px dashed red
