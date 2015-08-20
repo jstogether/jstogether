@@ -71,7 +71,9 @@ export default class Login extends Component {
 				<button className='login' onClick={this.onLoginClick}>{'Login'}</button>
 				<button className='register' onClick={this.onRegisterClick}>{'Register'}</button>
 				<br />
+
 				{err}
+				<a href='/auth/github'>{'Log in with Github'}</a>
 			</div>
 		);
 	}
