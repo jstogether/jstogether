@@ -52,4 +52,4 @@ if (!Array.prototype.find) {
 	};
 }
 
-React.render(App(user), $('#react-mount')[0]);
+React.render(App({user}), $('#react-mount')[0]);

@@ -3,7 +3,9 @@ import React from 'react'
 import Component from './component';
 
 import AppActions from '../action/app';
+
 import AppStore from '../store/app';
+import SessionStore from '../store/session';
 
 import Header from './header';
 import Login from './login';
@@ -35,7 +37,10 @@ export default class App extends Component {
 	componentDidMount () {
 		AppStore.addChangeListener(this.onStoreUpdate);
 
-		console.log(this.props);
+		if (this.props.user) {
+			console.log('Logging in');
+			SessionStore.onLoginSuccess(this.props.user);
+		}
 	}
 
 	/**
