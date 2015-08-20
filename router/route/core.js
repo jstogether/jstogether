@@ -11,10 +11,12 @@ let App = React.createFactory(AppComponent);
  *
  */
 router.get('/', (req, res) => {
-	let html = React.renderToString(App());
+	const html = React.renderToString(App());
+	const user = req.user;
 
 	return res.render('index', {
-		html: html
+		html,
+		user: 'var user = ' + JSON.stringify(user)
 	});
 });
 

@@ -34,6 +34,8 @@ export default class App extends Component {
 	 */
 	componentDidMount () {
 		AppStore.addChangeListener(this.onStoreUpdate);
+
+		console.log(this.props);
 	}
 
 	/**
