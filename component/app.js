@@ -3,9 +3,9 @@ import React from 'react'
 import Component from './component';
 
 import AppActions from '../action/app';
+import ServerActions from '../action/server';
 
 import AppStore from '../store/app';
-import SessionStore from '../store/session';
 
 import Header from './header';
 import Login from './login';
@@ -38,8 +38,8 @@ export default class App extends Component {
 		AppStore.addChangeListener(this.onStoreUpdate);
 
 		if (this.props.user) {
-			SessionStore.onLoginSuccess(this.props.user);
-			AppActions.navigate('projects');
+			// Fake the server responding to a login request
+			ServerActions.onLoginSuccess(this.props.user);
 		}
 	}
 
