@@ -6,7 +6,6 @@ export default {
 	 *
 	 */
 	loginSuccess (user) {
-		console.log('login success', user);
 		AppDispatcher.dispatch({
 			actionType: Constant.LOGIN_SUCCESS,
 			user
