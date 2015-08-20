@@ -38,8 +38,8 @@ export default class App extends Component {
 		AppStore.addChangeListener(this.onStoreUpdate);
 
 		if (this.props.user) {
-			console.log('Logging in');
 			SessionStore.onLoginSuccess(this.props.user);
+			AppActions.navigate('projects');
 		}
 	}
 
