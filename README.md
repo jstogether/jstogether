@@ -6,6 +6,7 @@ You will need these tools for local development:
 
 - [git](https://git-scm.com/)
 - [nodejs](https://nodejs.org/)
+- [python 2.7](https://www.python.org/)
 - [mongodb](https://www.mongodb.org/downloads)
 
 And these for deployment:
