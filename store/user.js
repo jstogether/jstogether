@@ -33,8 +33,8 @@ class UserStore extends Store {
 	/**
 	 *
 	 */
-	onSelectUser (user) {
-		this.data.currentUser = user;
+	onSelectUser (username) {
+		this.data.currentUser = this.data.users.find(user => user.username === username);
 		this.emitChange();
 	}
 
@@ -68,7 +68,7 @@ AppDispatcher.register((action) => {
 		userStore.onLogout();
 	break;
 	case Constant.SELECT_USER:
-		userStore.onSelectUser(action.user);
+		userStore.onSelectUser(action.username);
 	break;
 	case Constant.FETCH_USERS_SUCCESS:
 		userStore.onFetchUsersSuccess(action.users);
