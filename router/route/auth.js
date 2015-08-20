@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
-import {OAuth2Strategy} from 'passport-oauth';
+import {Strategy as GithubStrategy} from 'passport-github';
 import path from 'path';
 import bcrypt from 'bcrypt';
 import React from 'react';
@@ -75,28 +75,31 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 /********************************/
 /**  OAUTH2 STRATEGY - GITHUB  **/
 /********************************/
-passport.use('github', new OAuth2Strategy({
-	authorizationURL: 'https://github.com/login/oauth/authorize',
-	tokenURL: 'https://github.com/login/oauth/access_token',
+passport.use('github', new GithubStrategy({
 	clientID: process.env.GITHUB_CLIENT_ID,
 	clientSecret: process.env.GITHUB_CLIENT_SECRET,
 	callbackURL: 'http://www.jstogether.com/auth/github/callback'
 }, (accessToken, refreshToken, profile, done) => {
-	console.log('accessToken', accessToken);
-	console.log('refreshToken', refreshToken);
-	console.log('profile', profile);
+	const user = {
+		username: profile.username,
+		fullName: profile.displayName
+	};
 
-	done('error!');
+	if (profile.emails) {
+		user[email] = profile.emails[0].value;
+	}
+
+	User.findOrCreate({username: user.username}, user, done);
 }));
 
 
 router.get('/github', passport.authenticate('github', {
 	scope: 'user:email'
 }));
-router.get('/github/callback', passport.authenticate('github', {
-	successRedirect: '/',
-	failureRedirect: '/'
-}));
+router.get('/github/callback', passport.authenticate('github'), (req, res) => {
+	console.log('all done');
+	res.redirect('/');
+});
 
 
 
