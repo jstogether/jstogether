@@ -1,18 +1,25 @@
 import express from 'express';
 import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
+import {OAuth2Strategy} from 'passport-oauth';
 import path from 'path';
 import bcrypt from 'bcrypt';
 import React from 'react';
 import db from '../../db';
+import {github as secret} from '../../secret.json';
 
 let User = db.model('User');
 let router = express.Router();
 
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((username, done) => db.model('User').findOne({username}, done));
+passport.serializeUser((user, done) => done(null, user.username));
+passport.deserializeUser((username, done) => User.findOne({username}, done));
 
-passport.use(new LocalStrategy((username, password, done) => {
+
+
+/*******************************************/
+/**  LOCAL STRATEGY - USERNAME/PASSWORD   **/
+/*******************************************/
+passport.use('local', new LocalStrategy((username, password, done) => {
 	User.get(username, (err, user) => {
 		if (err) return done(err);
 
@@ -49,14 +56,51 @@ router.post('/register', (req, res) => {
 		}
 
 		passport.authenticate('local')(req, res, () => {
-			res.send(user.toClient());
+			req.logIn(req.user, (err) => {
+				if (err) res.status(403).send(err);
+				return res.send(req.user.toClient());
+			});
 		});
 	});
 });
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
-	res.send(req.user.toClient());
+	req.logIn(req.user, (err) => {
+		if (err) res.status(403).send(err);
+		return res.send(req.user.toClient());
+	});
 });
+
+
+
+/********************************/
+/**  OAUTH2 STRATEGY - GITHUB  **/
+/********************************/
+passport.use('github', new OAuth2Strategy({
+	authorizationURL: 'https://github.com/login/oauth/authorize',
+	tokenURL: 'https://github.com/login/oauth/access_token',
+	clientID: secret.clientId,
+	clientSecret: secret.clientSecret,
+	callbackUrl: 'http://www.jstogether.com/auth/github/callback'
+}, (accessToken, refreshToken, profile, done) => {
+	console.log('accessToken', accessToken);
+	console.log('refreshToken', refreshToken);
+	console.log('profile', profile);
+
+	done('error!');
+}));
+
+
+router.get('/github', passport.authenticate('github'));
+router.get('/github/callback', passport.authenticate('github', (req, res) => {
+	res.send({
+		awesome: true
+	});
+}));
+
+
+
+
 
 router.all('/logout', (req, res) => {
 	req.logout();
