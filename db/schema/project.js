@@ -8,7 +8,6 @@ let ProjectSchema = new Schema({
 		default: 'Project'
 	},
 	scope: String,
-	value: String,
 	markdown: String
 });
 
@@ -20,7 +19,6 @@ ProjectSchema.methods.toClient = function () {
 		id: this._id,
 		name: this.name,
 		scope: this.scope,
-		value: this.value,
 		markdown: this.markdown
 	};
 
