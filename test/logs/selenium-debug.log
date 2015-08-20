@@ -1,0 +1,42 @@
+00:46:34.069 INFO - Launching a standalone Selenium Server
+Setting system property webdriver.chrome.driver to test/chromedriver.exe
+00:46:34.105 INFO - Java: Oracle Corporation 25.51-b03
+00:46:34.105 INFO - OS: Windows 8.1 6.3 x86
+00:46:34.112 INFO - v2.47.1, with Core v2.47.1. Built from revision 411b314
+00:46:34.159 INFO - Driver class not found: com.opera.core.systems.OperaDriver
+00:46:34.159 INFO - Driver provider com.opera.core.systems.OperaDriver is not registered
+00:46:34.230 INFO - RemoteWebDriver instances should connect to: http://127.0.0.1:4444/wd/hub
+00:46:34.230 INFO - Selenium Server is up and running
+00:46:34.462 INFO - Executing: [new session: Capabilities [{accepSslCerts=true, acceptSslCerts=true, name=Login Test, browserName=chrome, javascriptEnabled=true, platform=ANY}]])
+00:46:34.474 INFO - Creating a new session for Capabilities [{accepSslCerts=true, acceptSslCerts=true, name=Login Test, browserName=chrome, javascriptEnabled=true, platform=ANY}]
+Starting ChromeDriver 2.18.343845 (73dd713ba7fbfb73cbb514e62641d8c96a94682a) on port 46552
+Only local connections are allowed.
+00:46:36.102 INFO - Done: [new session: Capabilities [{accepSslCerts=true, acceptSslCerts=true, name=Login Test, browserName=chrome, javascriptEnabled=true, platform=ANY}]]
+00:46:36.113 INFO - Executing: [get: http://localhost:1025])
+00:46:37.930 INFO - Done: [get: http://localhost:1025]
+00:46:37.938 INFO - Executing: [find elements: By.cssSelector: body])
+00:46:37.962 INFO - Done: [find elements: By.cssSelector: body]
+00:46:37.965 INFO - Executing: [is displayed: 0 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: body]])
+00:46:37.975 INFO - Done: [is displayed: 0 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: body]]
+00:46:37.981 INFO - Executing: [find element: By.cssSelector: input.login])
+00:46:37.993 INFO - Done: [find element: By.cssSelector: input.login]
+00:46:37.997 INFO - Executing: [send keys: 1 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: input.login], [D, a, v, e]])
+00:46:38.031 INFO - Done: [send keys: 1 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: input.login], [D, a, v, e]]
+00:46:38.034 INFO - Executing: [find element: By.cssSelector: input.password])
+00:46:38.069 INFO - Done: [find element: By.cssSelector: input.password]
+00:46:38.072 INFO - Executing: [send keys: 2 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: input.password], [a, b, c, d]])
+00:46:38.102 INFO - Done: [send keys: 2 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: input.password], [a, b, c, d]]
+00:46:38.106 INFO - Executing: [find elements: By.cssSelector: button.login])
+00:46:38.120 INFO - Done: [find elements: By.cssSelector: button.login]
+00:46:38.123 INFO - Executing: [is displayed: 3 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: button.login]])
+00:46:38.134 INFO - Done: [is displayed: 3 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: button.login]]
+00:46:38.138 INFO - Executing: [find element: By.cssSelector: button.login])
+00:46:38.151 INFO - Done: [find element: By.cssSelector: button.login]
+00:46:38.154 INFO - Executing: [click: 3 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: button.login]])
+00:46:38.179 INFO - Done: [click: 3 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: button.login]]
+00:46:39.185 INFO - Executing: [find element: By.cssSelector: .userInfo span.username])
+00:46:39.202 INFO - Done: [find element: By.cssSelector: .userInfo span.username]
+00:46:39.206 INFO - Executing: [get text: 4 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: .userInfo span.username]])
+00:46:39.229 INFO - Done: [get text: 4 [[ChromeDriver: chrome on WIN8_1 (2efa2feb8b889ca51fee219dd3fbc266)] -> css selector: .userInfo span.username]]
+00:46:39.234 INFO - Executing: [delete session: eb02ce50-3916-4abb-945f-dcd069b079a1])
+00:46:40.549 INFO - Done: [delete session: eb02ce50-3916-4abb-945f-dcd069b079a1]
