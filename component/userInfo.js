@@ -5,8 +5,11 @@ import AppActions from '../action/app';
 import SessionStore from '../store/session';
 
 function getState () {
+	const user = SessionStore.getUser();
+	const username = user ? user.username : null;
+
 	return {
-		user: SessionStore.getUser(),
+		username,
 		loggedIn: SessionStore.isLoggedIn()
 	};
 }
@@ -50,7 +53,7 @@ export default class UserInfo extends Component {
 		if (this.state.loggedIn) {
 			content = (
 				<span key='username' className='username'>
-					<span className='username' onClick={this.onUsernameClick}>{this.state.user.username + ' '}</span>
+					<span className='username' onClick={this.onUsernameClick}>{this.state.username}</span>
 					<span className='logoutButton' onClick={this.onLogoutClick}>{'(logout)'}</span>
 				</span>
 			);
@@ -74,7 +77,7 @@ export default class UserInfo extends Component {
 	 *
 	 */
 	onUsernameClick () {
-		AppActions.selectUser(this.state.user);
+		AppActions.selectUser(this.state.username);
 		AppActions.navigate('users');
 	}
 	
@@ -82,6 +85,6 @@ export default class UserInfo extends Component {
 	 *
 	 */
 	onStoreChange () {
-		this.setState(SessionStore.getAll());
+		this.setState(getState());
 	}
 }
