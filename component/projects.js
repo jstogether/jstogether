@@ -4,8 +4,10 @@ import Component from './component';
 import AppActions from '../action/app';
 
 import ProjectOverview from './projectOverview';
+import CreateProject from './createProject';
 
 import ProjectStore from '../store/project';
+import SessionStore from '../store/session';
 
 function getState () {
 	return {
@@ -21,7 +23,11 @@ export default class Projects extends Component {
 	constructor () {
 		super();
 
-		this._bind('onProjectStoreChange');
+		this._bind(
+			'renderCurrentProject',
+			'onProjectStoreChange',
+			'onCreateProjectClick'
+		);
 
 		this.state = getState();
 	}
@@ -44,9 +50,15 @@ export default class Projects extends Component {
 	 *
 	 */
 	render () {
+		const currentProject = this.state.currentProject;
+		const renderedProject = this.renderCurrentProject();
+		const createProjectBtn = SessionStore.isAdmin() ? <button onClick={this.onCreateProjectClick}>{'New'}</button> : null;
+
 		const projectList = this.state.projects.map((project, i) => {
+			const selectedProject = project === currentProject ? ' selected' : '';
+
 			return (
-				<li key={i} className='itemShort' onClick={this.createOnProjectClickHandler(project)}>
+				<li key={i} className={'itemShort' + selectedProject} onClick={this.createOnProjectClickHandler(project)}>
 					<span>{project.name}</span>
 				</li>
 			);
@@ -58,6 +70,7 @@ export default class Projects extends Component {
 					<ul className='list' onClick={this.onProjectClick}>
 						<li className='itemShort rootItem' onClick={this.createOnProjectClickHandler(null)}>
 							<span>{'Projects'}</span>
+							{createProjectBtn}
 						</li>
 
 						{projectList}
@@ -65,10 +78,43 @@ export default class Projects extends Component {
 				</div>
 
 				<div className={'contentContainer'}>
-					<ProjectOverview project={this.state.currentProject} />
+					{renderedProject}
 				</div>
 			</div>
 		);
+	}
+
+	/**
+	 *
+	 */
+	renderCurrentProject () {
+		const project = this.state.currentProject;
+
+		if (!project) {
+			return (
+				<div><span>{'Nothing to see here...'}</span></div>
+			);
+		}
+		else if (project === 'createNew') {
+			return (
+				<div className='projectOverview'>
+					<h1 >{'Projects'}</h1>
+					<CreateProject />
+				</div>
+			);
+		}
+
+		return (
+			<ProjectOverview key={project.id} project={project} />
+		);
+	}
+
+	/**
+	 *
+	 */
+	onCreateProjectClick (e) {
+		e.stopPropagation();
+		AppActions.showCreateProject();
 	}
 
 	/**
@@ -89,7 +135,7 @@ export default class Projects extends Component {
 	 *
 	 */
 	createOnProjectClickHandler (project) {
-		return () => {
+		return (e) => {
 			AppActions.selectProject(project);
 		};
 	}
