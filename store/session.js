@@ -35,6 +35,13 @@ class SessionStore extends Store {
 	/**
 	 *
 	 */
+	isAdmin () {
+		return this.data.user && this.data.user.admin;
+	}
+
+	/**
+	 *
+	 */
 	getError () {
 		return this.data.error;
 	}
