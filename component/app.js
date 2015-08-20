@@ -39,7 +39,7 @@ export default class App extends Component {
 
 		if (this.props.user) {
 			// Fake the server responding to a login request
-			ServerActions.onLoginSuccess(this.props.user);
+			ServerActions.loginSuccess(this.props.user);
 		}
 	}
 
