@@ -86,7 +86,7 @@ passport.use('github', new GithubStrategy({
 	};
 
 	if (profile.emails) {
-		user[email] = profile.emails[0].value;
+		user.email = profile.emails[0].value;
 	}
 
 	User.findOrCreate({username: user.username}, user, done);
