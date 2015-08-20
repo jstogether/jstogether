@@ -144,5 +144,19 @@ export default {
 			actionType: Constant.SELECT_USER,
 			user
 		});
+	},
+
+	/**
+	 *
+	 */
+	updateMarkdown (projectId, markdown) {
+		AppDispatcher.dispatch({
+			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
+			projectId
+		});
+
+		ProjectApi.updateMarkdown(projectId, markdown)
+		.done(ServerActions.updateProjectSuccess)
+		.fail(ServerActions.fail);
 	}
 };

@@ -5,7 +5,6 @@ export default {
 	 *
 	 */
 	fetchProjects () {
-		console.log('api.fetchProjects');
 		return $.get('/project');
 	},
 
@@ -24,6 +23,15 @@ export default {
 	deleteProject (projectId) {
 		return $.ajax('/project/' + projectId, {
 			method: 'DELETE'
+		});
+	},
+
+	/**
+	 *
+	 */
+	updateMarkdown (projectId, markdown) {
+		return $.post('/project/' + projectId + '/markdown', {
+			markdown
 		});
 	}
 }

@@ -110,5 +110,19 @@ export default {
 			actionType: Constant.DELETE_PROJECT_FAIL,
 			project
 		});
+	},
+
+	/**
+	 *
+	 */
+	updateProjectSuccess (project) {
+		AppDispatcher.dispatch({
+			actionType: Constant.UPDATE_PROJECT_SUCCESS,
+			project
+		});
+	},
+
+	fail (e) {
+		console.log('Server Action Failed: ', e);
 	}
 };

@@ -41,9 +41,28 @@ router.delete('/:projectId', (req, res) => {
 	let projectId = req.params.projectId;
 
 	Project.findOneAndRemove({_id: projectId}, (err, project) => {
-		if (err) res.sendStatus(500).send(err);
+		if (err) return res.sendStatus(500).send(err);
 
 		return res.send(project.toClient());
+	});
+});
+
+
+// Update Project Markdown
+router.post('/:projectId/markdown', (req, res) => {
+	let projectId = req.params.projectId;
+	let markdown = req.body.markdown;
+
+	Project.update({_id: projectId}, {
+		$set: {markdown}
+	}, (err) => {
+		if (err) return res.sendStatus(500).send(err);
+
+		Project.get(projectId, (err, project) => {
+			if (err) return res.sendStatus(500).send(err);
+
+			return res.send(project.toClient());
+		});
 	});
 });
 

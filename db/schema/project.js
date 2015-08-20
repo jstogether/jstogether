@@ -8,9 +8,9 @@ let ProjectSchema = new Schema({
 		default: 'Project'
 	},
 	scope: String,
-	value: String
+	value: String,
+	markdown: String
 });
-
 
 /**
  *
@@ -20,10 +20,16 @@ ProjectSchema.methods.toClient = function () {
 		id: this._id,
 		name: this.name,
 		scope: this.scope,
-		value: this.value
+		value: this.value,
+		markdown: this.markdown
 	};
 
 	return project;
 };
+
+ProjectSchema.statics.get = function (id, done) {
+	return this.findOne({_id: id}, done);
+};
+
 
 export default ProjectSchema;

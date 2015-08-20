@@ -28,7 +28,7 @@ class ProjectStore extends Store {
 	getProjects () {
 		return this.data.projects;
 	}
-	
+
 	/**
 	 *
 	 */
@@ -51,6 +51,20 @@ class ProjectStore extends Store {
 	onCreateProjectSuccess (project) {
 		this.data.projects.push(project);
 		this.emitChange();
+	}
+
+	/**
+	 *
+	 */
+	onUpdateProjectSuccess (project) {
+		for (let i = 0, len = this.data.projects.length; i < len; i += 1) {
+			if (this.data.projects[i].id === project.id) {
+				this.data.projects.splice(i, 1, project);
+				this.data.currentProject = project;
+
+				this.emitChange();
+			}
+		}
 	}
 
 	/**
@@ -98,6 +112,9 @@ AppDispatcher.register((action) => {
 	break;
 	case Constant.CREATE_PROJECT_FAIL:
 		console.log('Create project fail: ', action.err);
+	break;
+	case Constant.UPDATE_PROJECT_SUCCESS:
+		projectStore.onUpdateProjectSuccess(action.project);
 	break;
 	case Constant.DELETE_PROJECT_SUCCESS:
 		projectStore.onDeleteProjectSuccess(action.project);
