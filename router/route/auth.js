@@ -97,10 +97,8 @@ router.get('/github', passport.authenticate('github', {
 	scope: 'user:email'
 }));
 router.get('/github/callback', passport.authenticate('github'), (req, res) => {
-	req.login(req.user, err => {
-		if (err) return res.status(403).send(err);
-
-		return res.send(req.user.toClient());
+	req.login(req.user, (err) => {
+		return res.redirect('/');
 	});
 });
 
