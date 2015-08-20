@@ -6,7 +6,6 @@ import path from 'path';
 import bcrypt from 'bcrypt';
 import React from 'react';
 import db from '../../db';
-import {github as secret} from '../../secret.json';
 
 let User = db.model('User');
 let router = express.Router();
@@ -79,8 +78,8 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 passport.use('github', new OAuth2Strategy({
 	authorizationURL: 'https://github.com/login/oauth/authorize',
 	tokenURL: 'https://github.com/login/oauth/access_token',
-	clientID: secret.clientId,
-	clientSecret: secret.clientSecret,
+	clientID: process.env.GITHUB_CLIENT_ID,
+	clientSecret: process.env.GITHUB_CLIENT_SECRET,
 	callbackUrl: 'http://www.jstogether.com/auth/github/callback'
 }, (accessToken, refreshToken, profile, done) => {
 	console.log('accessToken', accessToken);
