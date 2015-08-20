@@ -14,14 +14,14 @@ export default class CreateProject extends Component {
 		this._bind(
 			'onNameChange',
 			'onScopeChange',
-			'onValueChange',
+			'onMarkdownChange',
 			'onCreateProject'
 		);
 
 		this.state = {
 			name: '',
 			scope: '',
-			value: ''
+			markdown: ''
 		};
 	}
 
@@ -59,20 +59,22 @@ export default class CreateProject extends Component {
 						</tr>
 						
 						<tr>
-							<td><label htmlFor='projectValue'>{'Value:'}</label></td>
+							<td><label htmlFor='projectMarkdown'>{'Markdown:'}</label></td>
 							<td>
-								<input
-									ref='projectValue'
-									name='projectValue'
-									type='text'
-									placeholder='Project Value'
-									onChange={this.onValueChange} />
+								<textarea
+									ref='projectMarkdown'
+									name='projectMarkdown'
+									placeholder='Project Markdown'
+									onChange={this.onMarkdownChange} />
+							</td>
+						</tr>
+						<tr>
+							<td colSpan={2} className='buttons'>
+								<button onClick={this.onCreateProject}>{'Create'}</button>
 							</td>
 						</tr>
 					</tbody>
 				</table>
-
-				<button onClick={this.onCreateProject}>{'Create'}</button>
 			</div>
 		);
 	}
@@ -98,9 +100,9 @@ export default class CreateProject extends Component {
 	/**
 	 *
 	 */
-	onValueChange (e) {
+	onMarkdownChange (e) {
 		this.setState({
-			value: e.target.value
+			markdown: e.target.value
 		});
 	}
 
