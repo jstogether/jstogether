@@ -90,12 +90,15 @@ passport.use('github', new OAuth2Strategy({
 }));
 
 
-router.get('/github', passport.authenticate('github'));
-router.get('/github/callback', passport.authenticate('github', (req, res) => {
-	res.send({
-		awesome: true
-	});
+router.get('/github', passport.authenticate('github', {
+	scope: 'user:email'
 }));
+router.get('/github/callback', passport.authenticate('github'), (req, res) => {
+	console.log('-----------------------------------------------------');
+	console.log(arguments);
+	console.log('-----------------------------------------------------');
+	res.send({test: true});
+});
 
 
 
