@@ -53,4 +53,49 @@ UserSchema.statics.get = function (username, done) {
 	this.findOne({username}, done);
 };
 
+/**
+ *
+ */
+UserSchema.statics.findOrCreate = function (conditions, doc, options, callback) {
+	if (arguments.length < 4) {
+		if (typeof options === 'function') {
+			// Scenario: findOrCreate(conditions, doc, callback)
+			callback = options;
+			options = {};
+		}
+		else if (typeof doc === 'function') {
+			// Scenario: findOrCreate(conditions, callback);
+			callback = doc;
+			doc = {};
+			options = {};
+		}
+	}
+
+	this.findOne(conditions, (err, result) => {
+		if (err || result) {
+			if (options && options.upsert && !err) {
+				this.update(conditions, doc, (err, count) => {
+					this.findOne(conditions, (err, result) => {
+						callback(err, result, false);
+					});
+				});
+			}
+			else {
+				callback(err, result, false)
+			}
+		}
+		else {
+			for (var key in doc) {
+				conditions[key] = doc[key]; 
+			}
+
+			var obj = new this(conditions)
+
+			obj.save(err => {
+				callback(err, obj, true);
+			});
+		}
+	});
+};
+
 export default UserSchema;
