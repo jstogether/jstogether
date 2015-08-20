@@ -8,7 +8,8 @@ let UserSchema = new Schema({
 		unique: true
 	},
 	password: String,
-	email: String
+	email: String,
+	admin: Boolean
 });
 
 /**
@@ -37,6 +38,10 @@ UserSchema.methods.toClient = function () {
 		username: this.username,
 		email: this.email
 	};
+
+	if (this.admin) {
+		user.admin = this.admin;
+	}
 
 	return user;
 };
