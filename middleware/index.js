@@ -1,9 +1,11 @@
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import expressSession from 'express-session';
 
 
 export default (app) => {
+	app.use(cookieParser());
 	app.use(bodyParser.json());
 
 	app.use(expressSession({
