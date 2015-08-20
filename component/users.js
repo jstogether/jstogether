@@ -44,9 +44,14 @@ export default class Users extends Component {
 	 *
 	 */
 	render () {
+		const currentUser = this.state.currentUser;
+		const renderedUser = this.renderCurrentUser();
+
 		const userList = this.state.users.map((user, i) => {
+			const selectedUser = user === currentUser ? ' selected' : '';
+
 			return (
-				<li key={i} className='itemShort' onClick={this.createOnUserClickHandler(user)}>
+				<li key={i} className={'itemShort' + selectedUser} onClick={this.createOnUserClickHandler(user)}>
 					<span>{user.username}</span>
 				</li>
 			);
@@ -65,9 +70,26 @@ export default class Users extends Component {
 				</div>
 
 				<div className={'contentContainer'}>
-					<UserProfile user={this.state.currentUser} />
+					{renderedUser}
 				</div>
 			</div>
+		);
+	}
+
+	/**
+	 *
+	 */
+	renderCurrentUser () {
+		const user = this.state.currentUser;
+
+		if (!user) {
+			return (
+				<div><span>{'Nothing to see here...'}</span></div>
+			);
+		}
+
+		return (
+			<UserProfile key={user.id} user={user} />
 		);
 	}
 
@@ -83,7 +105,7 @@ export default class Users extends Component {
 	 */
 	createOnUserClickHandler (user) {
 		return () => {
-			AppActions.selectUser(user);
+			AppActions.selectUser(user.username);
 		};
 	}
 }
