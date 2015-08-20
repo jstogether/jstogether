@@ -139,24 +139,64 @@ export default {
 	/**
 	 *
 	 */
-	selectUser (user) {
+	selectUser (username) {
 		AppDispatcher.dispatch({
 			actionType: Constant.SELECT_USER,
-			user
+			username
 		});
 	},
 
 	/**
 	 *
 	 */
-	updateMarkdown (projectId, markdown) {
+	updateProjectMarkdown (projectId, markdown) {
 		AppDispatcher.dispatch({
 			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
-			projectId
+			projectId,
+			markdown
 		});
 
 		ProjectApi.updateMarkdown(projectId, markdown)
 		.done(ServerActions.updateProjectSuccess)
 		.fail(ServerActions.fail);
+	},
+
+	/**
+	 *
+	 */
+	updateProjectName (projectId, name) {
+		AppDispatcher.dispatch({
+			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
+			projectId,
+			name
+		});
+
+		ProjectApi.updateName(projectId, name)
+		.done(ServerActions.updateProjectSuccess)
+		.fail(ServerActions.fail);
+	},
+
+	/**
+	 *
+	 */
+	updateProjectScope (projectId, scope) {
+		AppDispatcher.dispatch({
+			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
+			projectId,
+			scope
+		});
+
+		ProjectApi.updateScope(projectId, scope)
+		.done(ServerActions.updateProjectSuccess)
+		.fail(ServerActions.fail);
+	},
+
+	/**
+	 *
+	 */
+	showCreateProject () {
+		AppDispatcher.dispatch({
+			actionType: Constant.SHOW_CREATE_PROJECT
+		});
 	}
 };
