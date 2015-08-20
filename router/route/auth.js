@@ -80,7 +80,7 @@ passport.use('github', new OAuth2Strategy({
 	tokenURL: 'https://github.com/login/oauth/access_token',
 	clientID: process.env.GITHUB_CLIENT_ID,
 	clientSecret: process.env.GITHUB_CLIENT_SECRET,
-	callbackUrl: 'http://www.jstogether.com/auth/github/callback'
+	callbackURL: 'http://www.jstogether.com/auth/github/callback'
 }, (accessToken, refreshToken, profile, done) => {
 	console.log('accessToken', accessToken);
 	console.log('refreshToken', refreshToken);
