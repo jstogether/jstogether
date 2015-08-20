@@ -2,13 +2,14 @@ import express from 'express';
 import React from 'react';
 
 import db from '../../db';
+import ensureAuthentication from '../../middleware/ensureAuthentication';
 
 let Project = db.model('Project');
 let router = express.Router();
 
 
 // Create new Project
-router.post('/', (req, res) => {
+router.post('/', ensureAuthentication, (req, res) => {
 	let project = req.body.project;
 	let Project = db.model('Project');
 
@@ -48,13 +49,16 @@ router.delete('/:projectId', (req, res) => {
 });
 
 
-// Update Project Markdown
-router.post('/:projectId/markdown', (req, res) => {
+// Update Project
+router.post('/:projectId/:field', (req, res) => {
 	let projectId = req.params.projectId;
-	let markdown = req.body.markdown;
+	let field = req.params.field;
+	let update = {};
+
+	update[field] = req.body[field];
 
 	Project.update({_id: projectId}, {
-		$set: {markdown}
+		$set: update
 	}, (err) => {
 		if (err) return res.sendStatus(500).send(err);
 
