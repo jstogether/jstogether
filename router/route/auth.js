@@ -76,8 +76,8 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 /**  OAUTH2 STRATEGY - GITHUB  **/
 /********************************/
 passport.use('github', new GithubStrategy({
-	clientID: process.env.GITHUB_CLIENT_ID,
-	clientSecret: process.env.GITHUB_CLIENT_SECRET,
+	clientID: process.env.GITHUB_CLIENT_ID || 'no clientid',
+	clientSecret: process.env.GITHUB_CLIENT_SECRET || 'no secret',
 	callbackURL: 'http://www.jstogether.com/auth/github/callback'
 }, (accessToken, refreshToken, profile, done) => {
 	const user = {
