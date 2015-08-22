@@ -53,6 +53,12 @@ export default class Login extends Component {
 		}
 
 		return (
+			<div className='loginForm'>
+				<a href='/auth/github'>{'Log in with Github'}</a>
+			</div>
+		);
+		/*
+		return (
 			<div className='loginForm' onKeyUp={this.onKeyUp}>
 				<input 
 					type='text'
@@ -76,6 +82,7 @@ export default class Login extends Component {
 				<a href='/auth/github'>{'Log in with Github'}</a>
 			</div>
 		);
+		*/
 	}
 
 	/**
