@@ -8,6 +8,9 @@ You will need these tools for local development:
 - [nodejs](https://nodejs.org/)
 - [python 2.7](https://www.python.org/)
 - [mongodb](https://www.mongodb.org/downloads)
+- A c++ compiler, such as [visual studio](https://www.visualstudio.com/)
+
+Be sure to check "Add to system path" when installing Python.
 
 And these for deployment:
 
@@ -43,7 +46,7 @@ Add the jstogether Heroku server as a git remote server (you will need permissio
 
 To push your local react branch to the Heroku server:
 
-`git push heroku react:master`
+`git push heroku master`
 
 This pushes the local branch `react` to heroku, pretending it is the `master` branch.  This is done because Heroku will only execute the install scripts (and build/compile the application) when the branch being updated is named `master`.
 
