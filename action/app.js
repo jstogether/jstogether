@@ -29,7 +29,8 @@ export default {
 	/**
 	 *
 	 */
-	navigate (page) {
+	navigate (page, skipHistory) {
+
 		AppDispatcher.dispatch({
 			actionType: Constant.NAVIGATE,
 			page
@@ -100,6 +101,20 @@ export default {
 	 *
 	 */
 	createProject (project) {
+		if (!project) {
+			project = {
+				number: Math.floor(Math.random() * 1000),
+				name: 'Project Name',
+				scope: 'solo',
+				description: 'Project Description',
+				deadline: (+new Date) + (1000 * 60 * 60 * 24 * 7),
+				requirements: ['Build a project'],
+				extensions: ['Add a backend'],
+				help: ['www.google.com'],
+				teams: []
+			};
+		}
+		
 		AppDispatcher.dispatch({
 			actionType: Constant.CREATE_PROJECT_ATTEMPT,
 			project
@@ -149,13 +164,14 @@ export default {
 	/**
 	 *
 	 */
-	updateProject (project) {
+	updateProject (projectId, project) {
 		AppDispatcher.dispatch({
 			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
+			projectId,
 			project
 		});
 
-		ProjectApi.updateProject(project)
+		ProjectApi.updateProject(projectId, project)
 		.done(ServerActions.updateProjectSuccess)
 		.fail(ServerActions.fail);
 	},
