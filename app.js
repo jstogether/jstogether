@@ -1,12 +1,17 @@
 import React from 'react';
 import $ from 'jquery';
+import _ from 'lodash';
+import moment from 'moment-timezone';
 import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
 
 import AppComponent from './component/app';
 import AppActions from './action/app';
 
+
 if (ExecutionEnvironment.canUseDOM) {
 	window.$ = $;
+	window._ = _;
+	window.moment = moment;
 	window.AppActions = AppActions;
 }
 
