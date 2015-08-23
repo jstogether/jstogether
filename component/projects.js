@@ -53,7 +53,7 @@ export default class Projects extends Component {
 		const currentProject = this.state.currentProject;
 		const renderedProject = this.renderCurrentProject();
 		const createProjectBtn = SessionStore.isAdmin() ? <button onClick={this.onCreateProjectClick}>{'New'}</button> : null;
-
+		
 		const projectList = this.state.projects.map((project, i) => {
 			const selectedProject = project === currentProject ? ' selected' : '';
 

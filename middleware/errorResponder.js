@@ -21,13 +21,15 @@ let json = (res, code, msg) => {
 }
 
 export default (req, res, code, msg) => {
-	if (req.accepts('html')) {
-		return html(res, code, msg);
-	}
-
+	console.log('Responding to error');
+	console.log(code, msg);
 	if (req.accepts('json')) {
 		return json(res, code, msg);
 	}
 
-	return res.status(code);
+	if (req.accepts('html')) {
+		return html(res, code, msg);
+	}
+
+	return res.status(code).send(msg);
 }

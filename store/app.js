@@ -65,6 +65,9 @@ let appStore = new AppStore();
 
 AppDispatcher.register((action) => {
 	switch (action.actionType) {
+	case void 0:
+		console.warn('undefined Action Triggered', action);
+	break;
 	case Constant.DUMP_STORE:
 		if (action.store === 'App') {
 			appStore.dumpToConsole();

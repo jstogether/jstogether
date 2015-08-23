@@ -149,44 +149,13 @@ export default {
 	/**
 	 *
 	 */
-	updateProjectMarkdown (projectId, markdown) {
+	updateProject (project) {
 		AppDispatcher.dispatch({
 			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
-			projectId,
-			markdown
+			project
 		});
 
-		ProjectApi.updateMarkdown(projectId, markdown)
-		.done(ServerActions.updateProjectSuccess)
-		.fail(ServerActions.fail);
-	},
-
-	/**
-	 *
-	 */
-	updateProjectName (projectId, name) {
-		AppDispatcher.dispatch({
-			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
-			projectId,
-			name
-		});
-
-		ProjectApi.updateName(projectId, name)
-		.done(ServerActions.updateProjectSuccess)
-		.fail(ServerActions.fail);
-	},
-
-	/**
-	 *
-	 */
-	updateProjectScope (projectId, scope) {
-		AppDispatcher.dispatch({
-			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
-			projectId,
-			scope
-		});
-
-		ProjectApi.updateScope(projectId, scope)
+		ProjectApi.updateProject(project)
 		.done(ServerActions.updateProjectSuccess)
 		.fail(ServerActions.fail);
 	},
@@ -198,5 +167,20 @@ export default {
 		AppDispatcher.dispatch({
 			actionType: Constant.SHOW_CREATE_PROJECT
 		});
+	},
+
+	/**
+	 *
+	 */
+	createTeam (projectId, team) {
+		AppDispatcher.dispatch({
+			actionType: Constant.CREATE_TEAM_ATTEMPT,
+			projectId,
+			team
+		});
+
+		ProjectApi.createTeam(projectId, team)
+		.done(ServerActions.updateProjectSuccess)
+		.fail(ServerActions.fail);
 	}
 };

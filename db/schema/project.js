@@ -1,15 +1,19 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import TeamSchema from './team';
 
 let Schema = mongoose.Schema;
+
 let ProjectSchema = new Schema({
 	name: {
 		type: String,
 		default: 'Project'
 	},
 	scope: String,
-	markdown: String
+	markdown: String,
+	teams: [TeamSchema]
 });
+
 
 /**
  *
@@ -19,7 +23,8 @@ ProjectSchema.methods.toClient = function () {
 		id: this._id,
 		name: this.name,
 		scope: this.scope,
-		markdown: this.markdown
+		markdown: this.markdown,
+		teams: this.teams
 	};
 
 	return project;

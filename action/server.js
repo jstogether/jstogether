@@ -121,6 +121,9 @@ export default {
 		});
 	},
 
+	/**
+	 *
+	 */
 	fail (e) {
 		console.log('Server Action Failed: ', e);
 	}

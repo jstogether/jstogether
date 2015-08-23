@@ -3,6 +3,8 @@ import Component from './component';
 import _ from 'lodash';
 import marked from 'react-marked';
 
+import Team from './team';
+
 import AppActions from '../action/app';
 
 import SessionStore from '../store/session';
@@ -22,7 +24,8 @@ export default class ProjectOverview extends Component {
 			'toggleScope',
 			'onMarkdownChange',
 			'saveEdits',
-			'deleteProject'
+			'deleteProject',
+			'createTeam'
 		);
 
 		this.state = {
@@ -37,6 +40,7 @@ export default class ProjectOverview extends Component {
 		const content = [];
 		const project = this.props.project;
 		const edit = SessionStore.isAdmin() ? <span className={'editBtn'} onClick={this.toggleEditing}>{'[edit]'}</span> : null;
+		const teams = project.teams.map(team => <Team team={team} />);
 
 		if (this.state.editing) {
 			return this.renderEditView()
@@ -47,12 +51,26 @@ export default class ProjectOverview extends Component {
 		return (
 			<div className='projectOverview'>
 				<h1>{project.name}</h1>
-				<span className={'scope'}>{'(' + project.scope + ')'}</span>
+				<span className='scope'>{'(' + project.scope + ')'}</span>
 				{edit}
 				<br />
 
 				<div className='markdown'>
 					{markdown}
+				</div>
+
+				<hr />
+
+				<div className='join'>
+					<h3>{'To get onboard with this project, either create a new Team or join an existing one!'}</h3>
+					<input type='text' ref='teamName' name='teamName' placeholder='Team Name' />
+					<button onClick={this.createTeam}>{'Create New Team'}</button>
+				</div>
+
+				<hr />
+
+				<div className='teams'>
+					{teams}
 				</div>
 			</div>
 		);
@@ -64,6 +82,8 @@ export default class ProjectOverview extends Component {
 	renderEditView () {
 		const content = [];
 		const markdown = this.state.markdown ? marked(this.state.markdown) : null;
+		const project = this.props.project;
+		const teams = project.teams.map(team => <Team team={team} editing={true} />);
 
 		return (
 			<div className='projectOverview editing'>
@@ -82,6 +102,9 @@ export default class ProjectOverview extends Component {
 					value={this.state.markdown}
 					onChange={this.onMarkdownChange} />
 
+				<div className='teams'>
+					{teams}
+				</div>
 
 				<button onClick={this.saveEdits}>{'Save'}</button>
 				<button onClick={this.deleteProject}>{'Delete Project'}</button>
@@ -151,22 +174,23 @@ export default class ProjectOverview extends Component {
 		// request is sent to the server and the time the store triggers
 		// a change event sending us the NEW data.
 		let project = this.props.project;
+		let update = {
+			id: project.id
+		};
 
 		if (this.state.name !== project.name) {
-			project.name = this.state.name;
-			AppActions.updateProjectName(project.id, this.state.name);
+			update.name = project.name = this.state.name;
 		}
 
 		if (this.state.scope !== project.scope) {
-			project.scope = this.state.scope;
-			AppActions.updateProjectScope(project.id, this.state.scope);
+			update.scope = project.scope = this.state.scope;
 		}
 
 		if (this.state.markdown !== project.markdown) {
-			project.markdown = this.state.markdown;
-			AppActions.updateProjectMarkdown(project.id, this.state.markdown);
+			update.markdown = project.markdown = this.state.markdown;
 		}
 
+		AppActions.updateProject(update);
 		this.toggleEditing();
 	}
 
@@ -175,5 +199,25 @@ export default class ProjectOverview extends Component {
 	 */
 	deleteProject () {
 		AppActions.deleteProject(this.props.project.id);
+	}
+
+	/**
+	 *
+	 */
+	createTeam () {
+		const name = React.findDOMNode(this.refs.teamName).value;
+		const user = SessionStore.getUser();
+		const users = [
+			user.username
+		];
+
+		if (name) {
+			const team = {
+				name,
+				users
+			};
+
+			AppActions.createTeam(this.props.project.id, team);
+		}
 	}
 }

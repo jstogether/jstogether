@@ -21,7 +21,7 @@ export default {
 	 *
 	 */
 	deleteProject (projectId) {
-		return $.ajax('/project/' + projectId, {
+		return $.ajax(`/project/${projectId}/`, {
 			method: 'DELETE'
 		});
 	},
@@ -29,27 +29,19 @@ export default {
 	/**
 	 *
 	 */
-	updateName (projectId, name) {
-		return $.post('/project/' + projectId + '/name', {
-			name
+	updateProject (project) {
+		return $.ajax(`/project/${project.id}/`, {
+			method: 'PUT',
+			data: project
 		});
 	},
 
 	/**
 	 *
 	 */
-	updateScope (projectId, scope) {
-		return $.post('/project/' + projectId + '/scope', {
-			scope
-		});
-	},
-	
-	/**
-	 *
-	 */
-	updateMarkdown (projectId, markdown) {
-		return $.post('/project/' + projectId + '/markdown', {
-			markdown
+	createTeam (projectId, teamName) {
+		return $.post(`/project/${projectId}/team`, {
+			teamName
 		});
 	}
 }
