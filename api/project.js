@@ -12,9 +12,7 @@ export default {
 	 *
 	 */
 	createProject (project) {
-		return $.post('/project', {
-			project
-		});
+		return $.post('/project', project);
 	},
 
 	/**
@@ -29,8 +27,8 @@ export default {
 	/**
 	 *
 	 */
-	updateProject (project) {
-		return $.ajax(`/project/${project.id}/`, {
+	updateProject (projectId, project) {
+		return $.ajax(`/project/${projectId}/`, {
 			method: 'PUT',
 			data: project
 		});
@@ -40,8 +38,6 @@ export default {
 	 *
 	 */
 	createTeam (projectId, team) {
-		return $.post(`/project/${projectId}/team`, {
-			team
-		});
+		return $.post(`/project/${projectId}/team`, team);
 	}
 }
