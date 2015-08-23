@@ -1,13 +1,18 @@
 import React from 'react'
 import Component from './component';
 import _ from 'lodash';
+
 import marked from 'react-marked';
+import moment from 'moment-timezone';
 
 import Team from './team';
 
 import AppActions from '../action/app';
 
 import SessionStore from '../store/session';
+
+const dateFormat = 'Do MMM YYYY HH:mm:ss';
+const scopes = ['solo', 'peer', 'group'];
 
 
 export default class ProjectOverview extends Component {
@@ -18,14 +23,33 @@ export default class ProjectOverview extends Component {
 		super();
 
 		this._bind(
-			'renderEditView',
-			'toggleEditing',
+			'renderProjectTitle',
+			'renderProjectScope',
+			'renderEditButton',
+			'renderDescription',
+			'renderProjectSummary',
+			'renderJoinProjectDialog',
+			'renderTeams',
+			'renderSaveButtons',
+			'onNumberChange',
 			'onNameChange',
-			'toggleScope',
-			'onMarkdownChange',
-			'saveEdits',
-			'deleteProject',
-			'createTeam'
+			'onScopeClick',
+			'toggleEditing',
+			'onDescriptionChange',
+			'onDeadlineChange',
+			'onRequirementChange',
+			'onExtensionChange',
+			'onHelpChange',
+			'onAddRequirementClick',
+			'onAddExtensionClick',
+			'onAddHelpClick',
+			'onDeleteRequirementClick',
+			'onDeleteExtensionClick',
+			'onDeleteHelpClick',
+			'onCreateTeamClick',
+			'onSaveEditsClick',
+			'onDeleteProjectClick',
+			'onCancelEditClick'
 		);
 
 		this.state = {
@@ -36,42 +60,38 @@ export default class ProjectOverview extends Component {
 	/**
 	 *
 	 */
+	getClassName () {
+		return 'projectOverview' + (this.state.editing ? ' editing' : '');
+	}
+
+	/**
+	 *
+	 */
 	render () {
-		const content = [];
-		const project = this.props.project;
-		const edit = SessionStore.isAdmin() ? <span className={'editBtn'} onClick={this.toggleEditing}>{'[edit]'}</span> : null;
-		const teams = project.teams.map(team => <Team team={team} />);
-
-		if (this.state.editing) {
-			return this.renderEditView()
-		}
-
-		const markdown = project.markdown ? marked(project.markdown) : null;
-
+		const editing = this.state.editing;
+		const project = editing ? this.state.project : this.props.project;
+		
 		return (
-			<div className='projectOverview'>
-				<h1>{project.name}</h1>
-				<span className='scope'>{'(' + project.scope + ')'}</span>
-				{edit}
+			<div className={this.getClassName()}>
+				{this.renderProjectTitle(editing, project)}
+
+				{this.renderProjectScope(editing, project)}
+
+				{this.renderEditButton(editing, project)}
+
 				<br />
 
-				<div className='markdown'>
-					{markdown}
-				</div>
+				{this.renderDescription(editing, project)}
+
+				{this.renderProjectSummary(editing, project)}
+
+				{this.renderJoinProjectDialog(editing, project)}
 
 				<hr />
 
-				<div className='join'>
-					<h3>{'To get onboard with this project, either create a new Team or join an existing one!'}</h3>
-					<input type='text' ref='teamName' name='teamName' placeholder='Team Name' />
-					<button onClick={this.createTeam}>{'Create New Team'}</button>
-				</div>
+				{this.renderSaveButtons(editing, project)}
 
-				<hr />
-
-				<div className='teams'>
-					{teams}
-				</div>
+				{this.renderTeams(editing, project)}
 			</div>
 		);
 	}
@@ -79,132 +99,464 @@ export default class ProjectOverview extends Component {
 	/**
 	 *
 	 */
-	renderEditView () {
-		const content = [];
-		const markdown = this.state.markdown ? marked(this.state.markdown) : null;
-		const project = this.props.project;
-		const teams = project.teams.map(team => <Team team={team} editing={true} />);
+	renderProjectTitle (editing, project) {
+		if (editing) {
+			return (
+				<h2 className='title editing'>
+					{'Project '}
+
+					<input
+						type='text'
+						className='number textStyle'
+						value={project.number}
+						onChange={this.onNumberChange} />
+
+					<span>{': '}</span>
+
+					<input
+						type='text'
+						className='name textStyle'
+						value={project.name}
+						onChange={this.onNameChange} />
+				</h2>
+			);
+		}
 
 		return (
-			<div className='projectOverview editing'>
-				<h1 contentEditable={true} onKeyUp={this.onNameChange}>{this.state.name}</h1>
-				<span className={'scope'} onClick={this.toggleScope}>{'(' + this.state.scope + ')'}</span>
-				<br />
+				<h2 className='title'>
+					{'Project ' + project.number + ': ' + project.name}
+				</h2>
+		);		
+	}
 
-				<div className='markdown'>
-					{markdown}
-				</div>
+	/**
+	 *
+	 */
+	renderProjectScope (editing, project) {
+		if (editing) {
+			return (
+				<span
+					className='scope editing'
+					onClick={this.onScopeClick}>
+					{'(' + project.scope + ')'}
+				</span>
+			);
+		}
 
+		return (
+			<span
+				className='scope'>
+				{'(' + project.scope + ')'}
+			</span>
+		);
+	}
+
+	/**
+	 *
+	 */
+	renderEditButton (editing, project) {
+		if (!SessionStore.isAdmin()) return null;
+
+		const text = editing ? 'Cancel Edit' : 'Edit';
+		const handler = editing ? this.onCancelEditClick : this.toggleEditing;
+
+		return (
+			<button
+				className='editBtn'
+				onClick={handler}>
+				{text}
+			</button>
+		);
+	}
+
+	/**
+	 *
+	 */
+	renderDescription (editing, project) {
+		const content = [(
+			<div className='description'>
+				{marked(project.description)}
+			</div>
+		)];
+
+		if (editing) {
+			content.push(
 				<textarea
-					contentEditable={true}
-					ref='markdownValue'
-					className={'markdown'}
-					value={this.state.markdown}
-					onChange={this.onMarkdownChange} />
+					ref='descriptionMarkdown'
+					className={'markdown editing'}
+					value={project.description}
+					onChange={this.onDescriptionChange} />
+			);
+		}
 
-				<div className='teams'>
-					{teams}
-				</div>
+		return content;
+	}
 
-				<button onClick={this.saveEdits}>{'Save'}</button>
-				<button onClick={this.deleteProject}>{'Delete Project'}</button>
-				<button onClick={this.toggleEditing}>{'Cancel Editing'}</button>
+	/**
+	 *
+	 */
+	renderProjectSummary (editing, project) {
+		let deadline;
+		let requirements;
+		let extensions;
+		let help;
+
+		if (editing) {
+			deadline = (
+				<input type='text' value={project.deadline} onChange={this.onDeadlineChange} />
+			);
+
+			requirements = project.requirements.map((requirement, i) => {
+				return (
+					<li>
+						<input type='text' value={requirement} onChange={this.onRequirementChange(i)} />
+						<span className='delete' onClick={this.onDeleteRequirementClick(i)}>{'-'}</span>
+					</li>
+				);
+			});
+			extensions = project.extensions.map((extension, i) => {
+				return (
+					<li>
+						<input type='text' value={extension} onChange={this.onExtensionChange(i)} />
+						<span className='delete' onClick={this.onDeleteExtensionClick(i)}>{'-'}</span>
+					</li>
+				);
+			});
+			help = project.help.map((help, i) => {
+				return (
+					<li>
+						<input type='text' value={help} onChange={this.onHelpChange(i)} />
+						<span className='delete' onClick={this.onDeleteHelpClick(i)}>{'-'}</span>
+					</li>
+				);
+			});
+		}
+		else {
+			deadline = (
+				<span>{moment(project.deadline).tz('utc').format(dateFormat)}</span>
+			);
+
+			requirements = project.requirements.map((requirement, i) => {
+				return (
+					<li>
+						<span>{requirement}</span>
+					</li>
+				);
+			});
+			extensions = project.extensions.map((extension, i) => {
+				return (
+					<li>
+						<span>{extension}</span>
+					</li>
+				);
+			});
+			help = project.help.map((help, i) => {
+				return (
+					<li>
+						<span>{help}</span>
+					</li>
+				);
+			});
+		}
+
+		return (
+			<table className='keyvalue'>
+				<tbody>
+					<tr>
+						<th>{'Due'}</th>
+						<td>{deadline}</td>
+					</tr><tr>
+						<th>
+							{'Base Requirements'}
+							<span className='addNew' onClick={this.onAddRequirementClick}>{'+'}</span>	
+						</th>
+						<td>
+							<ol>{requirements}</ol>
+						</td>
+					</tr><tr>
+						<th>
+							{'Extra Credit Extensions'}
+							<span className='addNew' onClick={this.onAddExtensionClick}>{'+'}</span>
+						</th>
+						<td>
+							<ol start={requirements.length}>{extensions}</ol>
+						</td>
+					</tr><tr>
+						<th>
+							{'Helpful Links'}
+							<span className='addNew' onClick={this.onAddHelpClick}>{'+'}</span>
+						</th>
+						<td>
+							<ul>{help}</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		);
+	}
+
+	/**
+	 *
+	 */
+	renderJoinProjectDialog (editing, project) {
+		return (
+			<div className='join'>
+				<span>{'To get onboard with this project, either create a new Team or join an existing one!'}</span>
+				<br />
+				<input type='text' ref='teamName' name='teamName' placeholder='Team Name' />
+				<br />
+				<button onClick={this.onCreateTeamClick}>{'Create New Team'}</button>
 			</div>
 		);
+	}
+
+	/**
+	 *
+	 */
+	renderTeams (editing, project) {
+		const teams = project.teams.map(team => <Team team={team} />);
+
+		return (
+			<div className='teams'>
+				{teams}
+			</div>
+		);
+	}
+
+	/**
+	 *
+	 */
+	renderSaveButtons (editing, project) {
+		if (!editing) return null;
+
+		return [
+			<button onClick={this.onSaveEditsClick}>{'Save'}</button>,
+			<button onClick={this.onDeleteProjectClick}>{'Delete Project'}</button>
+		];
 	}
 
 	/**
 	 *
 	 */
 	toggleEditing () {
-		let project = this.props.project;
-		let editing = !this.state.editing;
-		let newScope = {};
+		const editing = !this.state.editing;
 
-		newScope.editing = editing;
-		newScope.name = editing ? project.name : null;
-		newScope.scope = editing ? project.scope : null;
-		newScope.markdown = editing ? project.markdown: null;
+		this.setState({
+			project: editing ? _.cloneDeep(this.props.project) : null,
+			editing
+		});
+	}
 
-		this.setState(newScope);
+	/**
+	 *
+	 */
+	onNumberChange (e) {
+		const number = e.target.value;
+		const project = this.state.project;
+
+		project.number = number;
+		this._forceUpdate();
 	}
 
 	/**
 	 *
 	 */
 	onNameChange (e) {
-		let name = e.target.innerText;
+		const name = e.target.value;
+		const project = this.state.project;
 
-		this.setState({
-			name
-		});
+		project.name = name;
+		this._forceUpdate();
 	}
 
 	/**
 	 *
 	 */
-	toggleScope () {
-		let scope = this.state.scope;
+	onScopeClick () {
+		const project = this.state.project;
+		const index = scopes.indexOf(project.scope);
+		const newScope = scopes[(index + 1) % scopes.length];
 
-		scope = scope === 'solo' ? 'group' : 'solo';
-
-		this.setState({
-			scope
-		});
+		project.scope = newScope;
+		this._forceUpdate();
 	}
 
 	/**
 	 *
 	 */
-	onMarkdownChange (e) {
-		let markdown = e.target.value;
+	onDescriptionChange (e) {
+		const description = e.target.value;
+		const project = this.state.project;
 
-		this.setState({
-			markdown
-		});
+		project.description = description;
+		this._forceUpdate();
 	}
 
 	/**
 	 *
 	 */
-	saveEdits () {
-		// TODO: do this properly.
-		// I'm changing values in the `project` object directly
-		// just to prevent flashing the OLD data between the time the
-		// request is sent to the server and the time the store triggers
-		// a change event sending us the NEW data.
-		let project = this.props.project;
-		let update = {
-			id: project.id
+	onDeadlineChange (e) {
+		console.log('Deadline Change', arguments);
+	}
+
+	/**
+	 *
+	 */
+	onRequirementChange (index) {
+		return (e) => {
+			let project = this.state.project;
+			project.requirements[index] = e.target.value;
+			console.log(e.target.value);
+			this._forceUpdate();
 		};
+	}
 
-		if (this.state.name !== project.name) {
-			update.name = project.name = this.state.name;
+	/**
+	 *
+	 */
+	onExtensionChange (index) {
+		return (e) => {
+			let project = this.state.project;
+			project.extensions[index] = e.target.value;
+			this._forceUpdate();
+		};
+	}
+
+	/**
+	 *
+	 */
+	onHelpChange (index) {
+		return (e) => {
+			let project = this.state.project;
+			project.help[index] = e.target.value;
+			this._forceUpdate();
+		};
+	}
+
+	/**
+	 *
+	 */
+	onAddRequirementClick () {
+		this.state.project.requirements.push('');
+		this._forceUpdate();
+	}
+
+	/**
+	 *
+	 */
+	onAddExtensionClick () {
+		this.state.project.extensions.push('');
+		this._forceUpdate();
+	}
+
+	/**
+	 *
+	 */
+	onAddHelpClick () {
+		this.state.project.help.push('');
+		this._forceUpdate();
+	}
+
+	/**
+	 *
+	 */
+	onDeleteRequirementClick (i) {
+		return () => {
+			this.state.project.requirements.splice(i, 1);
+			this._forceUpdate();
+		};
+	}
+
+	/**
+	 *
+	 */
+	onDeleteExtensionClick (i) {
+		return () => {
+			this.state.project.extensions.splice(i, 1);
+			this._forceUpdate();
+		};
+	}
+
+	/**
+	 *
+	 */
+	onDeleteHelpClick (i) {
+		return () => {
+			this.state.project.help.splice(i, 1);
+			this._forceUpdate();
+		};
+	}
+
+	/**
+	 *
+	 */
+	onSaveEditsClick () {
+		const project = this.props.project;
+		const clone = this.state.project;
+
+		const update = {};
+
+		if (clone.number !== project.number) {
+			update.number = project.number = clone.number;
+		}
+		if (clone.name !== project.name) {
+			update.name = project.name = clone.name;
+		}
+		if (clone.scope !== project.scope) {
+			update.scope = project.scope = clone.scope;
+		}
+		if (clone.deadline !== project.deadline) {
+			update.deadline = project.deadline = clone.deadline;
+		}
+		if (clone.description !== project.description) {
+			update.description = project.description = clone.description;
 		}
 
-		if (this.state.scope !== project.scope) {
-			update.scope = project.scope = this.state.scope;
+		clone.requirements.forEach((requirement, i) => {
+			if (project.requirements[i] !== requirement) {
+				update.requirements = clone.requirements;
+				return false;
+			}
+		});
+
+		clone.extensions.forEach((extension, i) => {
+			if (project.extensions[i] !== extension) {
+				update.extensions = clone.extensions;
+				return false;
+			}
+		});
+
+		clone.help.forEach((help, i) => {
+			if (project.help[i] !== help) {
+				update.help = clone.help;
+			}
+		});
+
+		if (Object.keys(update).length > 0) {
+			AppActions.updateProject(project.id, update);
 		}
 
-		if (this.state.markdown !== project.markdown) {
-			update.markdown = project.markdown = this.state.markdown;
-		}
-
-		AppActions.updateProject(update);
 		this.toggleEditing();
 	}
 
 	/**
 	 *
 	 */
-	deleteProject () {
+	onDeleteProjectClick () {
 		AppActions.deleteProject(this.props.project.id);
 	}
 
 	/**
 	 *
 	 */
-	createTeam () {
+	onCancelEditClick () {
+		this.toggleEditing();
+	}
+
+	/**
+	 *
+	 */
+	onCreateTeamClick () {
 		const name = React.findDOMNode(this.refs.teamName).value;
 		const user = SessionStore.getUser();
 		const users = [
