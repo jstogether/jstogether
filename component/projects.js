@@ -114,7 +114,8 @@ export default class Projects extends Component {
 	 */
 	onCreateProjectClick (e) {
 		e.stopPropagation();
-		AppActions.showCreateProject();
+
+		AppActions.createProject();
 	}
 
 	/**
