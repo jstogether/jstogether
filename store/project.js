@@ -50,8 +50,7 @@ class ProjectStore extends Store {
 	 */
 	onCreateProjectSuccess (project) {
 		this.data.projects.push(project);
-		this.data.currentProject = project;
-		this.emitChange();
+		this.onSelectProject(project);
 	}
 
 	/**

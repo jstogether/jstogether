@@ -33,6 +33,20 @@ class UserStore extends Store {
 	/**
 	 *
 	 */
+	get (username) {
+		return this.data.users.find(user => user.username === username);
+	}
+
+	/**
+	 *
+	 */
+	getMulti (usernames) {
+		return this.data.users.filter(user => usernames.indexOf(user.username) > -1);
+	}
+
+	/**
+	 *
+	 */
 	onSelectUser (username) {
 		this.data.currentUser = this.data.users.find(user => user.username === username);
 		this.emitChange();
