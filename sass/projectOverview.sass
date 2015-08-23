@@ -1,0 +1,45 @@
+@import 'vars'
+
+.projectOverview, .userProfile
+	margin: 20px
+
+	h2
+		display: inline
+
+	span.scope
+		color: $headingColor
+		margin: 0 10px
+
+	span.editBtn
+		color: blue
+
+	textarea
+		width: 95%
+		display: block
+		min-height: 500px
+
+	ol, ul
+		list-style-position: inside
+		padding-left: 0
+
+	.addNew
+		display: none
+
+	.delete
+		display: none
+
+
+	&.editing
+		outline: 2px dashed red
+
+		.addNew
+			display: inline
+
+		.delete
+			display: inline
+
+		.number
+			width: 2em
+
+.createProject table
+	width: 100%
