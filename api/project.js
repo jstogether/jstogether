@@ -39,9 +39,9 @@ export default {
 	/**
 	 *
 	 */
-	createTeam (projectId, teamName) {
+	createTeam (projectId, team) {
 		return $.post(`/project/${projectId}/team`, {
-			teamName
+			team
 		});
 	}
 }
