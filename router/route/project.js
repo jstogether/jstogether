@@ -65,7 +65,7 @@ router.route('/:projectId')
 		return res.send(project.toClient());
 	});
 })
-.put((req, res) => {
+.put(isAdmin, (req, res) => {
 	// Update a given project
 	console.log('PUT to /project/:projectId');
 	console.log(req.body);
@@ -82,7 +82,7 @@ router.route('/:projectId')
 		});
 	});
 })
-.delete((req, res) => {
+.delete(isAdmin, (req, res) => {
 	// Delete a given project
 	console.log('DELETE to /project/:projectId');
 	Project.findOneAndRemove({_id: req.projectId}, (err, project) => {
