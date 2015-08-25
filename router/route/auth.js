@@ -76,13 +76,16 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 /**  OAUTH2 STRATEGY - GITHUB  **/
 /********************************/
 passport.use('github', new GithubStrategy({
-	clientID: process.env.GITHUB_CLIENT_ID || 'no clientid',
-	clientSecret: process.env.GITHUB_CLIENT_SECRET || 'no secret',
-	callbackURL: 'http://www.jstogether.com/auth/github/callback'
+	clientID: process.env.GITHUB_CLIENT_ID || 'No id',
+	clientSecret: process.env.GITHUB_CLIENT_SECRET || 'No secret',
+	callbackURL: 'http://localhost:1025/auth/github/callback'
 }, (accessToken, refreshToken, profile, done) => {
 	const user = {
 		username: profile.username,
-		fullName: profile.displayName
+		fullName: profile.displayName,
+        github: profile.html_url,
+        location: profile.location,
+        avatar_url: profile.avatar_url
 	};
 
 	if (profile.emails) {
@@ -94,7 +97,7 @@ passport.use('github', new GithubStrategy({
 
 
 router.get('/github', passport.authenticate('github', {
-	scope: 'user:email'
+	scope: 'user'
 }));
 router.get('/github/callback', passport.authenticate('github'), (req, res) => {
 	req.login(req.user, (err) => {

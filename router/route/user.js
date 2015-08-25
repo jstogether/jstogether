@@ -32,4 +32,16 @@ router.get('/', (req, res) => {
 	});
 });
 
+router.get('/:username/email', (req, res) => {
+
+    User.findOne({
+        username: req.params.username
+    }, (err, user) => {
+        if (err) return res.sendStatus(500);
+        if (!user) return res.sendStatus(404);
+
+        return res.send(user.toClient());
+    });
+});
+
 export default router;

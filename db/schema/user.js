@@ -39,7 +39,10 @@ UserSchema.pre('save', function (next) {
 UserSchema.methods.toClient = function () {
 	let user = {
 		username: this.username,
-		email: this.email
+		email: this.email,
+        html_url: this.html_url,
+        location: this.location,
+        avatar_url: this.avatar_url
 	};
 
 	if (this.admin) {
