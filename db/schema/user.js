@@ -9,6 +9,9 @@ let UserSchema = new Schema({
 	},
 	password: String,
 	email: String,
+    html_url: String,
+    location: String,
+    avatar_url: String,
 	admin: Boolean
 });
 
