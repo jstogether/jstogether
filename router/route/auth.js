@@ -37,7 +37,7 @@ passport.use('local', new LocalStrategy((username, password, done) => {
 				});
 			}
 
-			return done(null, user.toClient());
+			return done(null, user);
 		});
 	});
 }));
