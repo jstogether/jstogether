@@ -82,12 +82,12 @@ passport.use('github', new GithubStrategy({
 }, (accessToken, refreshToken, profile, done) => {
 	const user = {
 		username: profile.username,
-		fullName: profile.displayName
+		fullName: profile.displayName,
+		githubUrl: profile.profileUrl,
+		email: '', // TODO: get this from github manually
+		location: profile._json.location,
+		avatarUrl: profile._json.avatar_url
 	};
-
-	if (profile.emails) {
-		user.email = profile.emails[0].value;
-	}
 
 	User.findOrCreate({username: user.username}, user, done);
 }));

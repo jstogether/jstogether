@@ -7,9 +7,12 @@ let UserSchema = new Schema({
 		type: String,
 		unique: true
 	},
-	password: String,
 	email: String,
-	admin: Boolean
+	admin: Boolean,
+	githubUrl: String,
+	fullName: String,
+	location: String,
+	avatarUrl: String
 });
 
 /**
@@ -36,7 +39,11 @@ UserSchema.pre('save', function (next) {
 UserSchema.methods.toClient = function () {
 	let user = {
 		username: this.username,
-		email: this.email
+		email: this.email,
+		githubUrl: this.githubUrl,
+		fullName: this.fullName,
+		location: this.location,
+		avatarUrl: this.avatarUrl
 	};
 
 	if (this.admin) {
