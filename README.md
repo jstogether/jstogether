@@ -10,19 +10,25 @@ You will need these tools for local development:
 - [mongodb](https://www.mongodb.org/downloads)
 - A c++ compiler, such as [visual studio](https://www.visualstudio.com/)
 
-Be sure to check "Add to system path" when installing Python.
-
 And these for deployment:
 
 - [heroku](https://heroku.com)
 
+# Setup Environment
+
+Be sure to check "Add to system path" when installing Python.
+
+In order for github authentication to work, you'll need to create 2
+environment variables:
+
+- GITHUB_CLIENT_ID: xxx
+- GITHUB_CLIENT_SECRET: xxx
+
+Admins have these values.
+
 Clone the repository:
 
 `git clone git@github.com:jstogether/jstogether.git`
-
-Currently we have 2 branches: `master` and `react`.  To develop with the react branch:
-
-`git checkout react`
 
 Install the NPM dependencies.  This will also execute an NPM postinstall script (found in [`package.json`](https://github.com/jstogether/jstogether/blob/react/package.json)), which will compile/build the project source and bundle into `/public/bundle.js` and `/public/css/main.css` using gulp tasks `browserify` and `sass`.
 
@@ -47,8 +53,6 @@ Add the jstogether Heroku server as a git remote server (you will need permissio
 To push your local react branch to the Heroku server:
 
 `git push heroku master`
-
-This pushes the local branch `react` to heroku, pretending it is the `master` branch.  This is done because Heroku will only execute the install scripts (and build/compile the application) when the branch being updated is named `master`.
 
 ### Questions?
 
