@@ -9,9 +9,9 @@ let UserSchema = new Schema({
 	},
 	password: String,
 	email: String,
-    html_url: String,
-    location: String,
-    avatar_url: String,
+	html_url: String,
+	location: String,
+	avatar_url: String,
 	admin: Boolean
 });
 
@@ -40,9 +40,9 @@ UserSchema.methods.toClient = function () {
 	let user = {
 		username: this.username,
 		email: this.email,
-        html_url: this.html_url,
-        location: this.location,
-        avatar_url: this.avatar_url
+		html_url: this.html_url,
+		location: this.location,
+		avatar_url: this.avatar_url
 	};
 
 	if (this.admin) {
