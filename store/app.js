@@ -47,6 +47,7 @@ class AppStore extends Store {
 		// this needs to be done properly
 		setTimeout(AppActions.fetchProjects);
 		setTimeout(AppActions.fetchUsers);
+		setTimeout(AppActions.fetchTeams);
 
 		this.emitChange();
 	}

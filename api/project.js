@@ -32,12 +32,5 @@ export default {
 			method: 'PUT',
 			data: project
 		});
-	},
-
-	/**
-	 *
-	 */
-	createTeam (projectId, team) {
-		return $.post(`/project/${projectId}/team`, team);
 	}
 }

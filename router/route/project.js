@@ -4,22 +4,9 @@ import React from 'react';
 import db from '../../db';
 import isAdmin from '../../middleware/isAdmin';
 
-let Project = db.model('Project');
-let router = express.Router();
-
-/**
- *
- */
-router.param('projectId', (req, res, next) => {
-	// Parse param and provide error if not supplied
-	console.log('projectID Param');
-	if (req.params.projectId) {
-		req.projectId = req.params.projectId;
-		return next();
-	}
-
-	return next(new Error('No ProjectID supplied'));
-});
+const Project = db.model('Project');
+const Team = db.model('Team');
+const router = express.Router();
 
 
 /**
@@ -28,24 +15,27 @@ router.param('projectId', (req, res, next) => {
 router.route('/')
 .get((req, res) => {
 	// Get all projects
-	console.log('GET to /project/');
+	console.log('GET /project/');
+
 	Project.find((err, projects) => {
-		if (err) return res.sendStatus(500);
-		if (!projects) return res.sendStatus(404);
+		if (err) return res.status(500).send(err);
+		if (!projects) return res.status(404).send('No Projects Found');
 
 		projects = projects.map(project => project.toClient());
+
 		return res.send(projects);
 	});
 })
 .post(isAdmin, (req, res) => {
 	// Create a new project
-	console.log('POST to /project/');
+	console.log('POST /project/');
+	console.log(req.body);
 
-	Project.create(req.body, (err, project) => {
-		if (err) {
-			let status = err.code === 11000 ? 409 : 500;
-			return res.sendStatus(status);
-		}
+	const query = req.body;
+
+	Project.create(query, (err, project) => {
+		if (err) return res.status(500).send(err);
+		if (!project) return res.status(404).send('Project could not be created');
 
 		return res.send(project.toClient());
 	});
@@ -58,25 +48,34 @@ router.route('/')
 router.route('/:projectId')
 .get((req, res) => {
 	// Get a given project
-	console.log('GET to /project/:projectId');
-	Project.get(req.projectId, (err, project) => {
-		if (err) return res.status(404).send(err);
+	console.log(`GET /project/${req.params.projectId}`);
+
+	Project.getById(req.params.projectId, (err, project) => {
+		if (err) return res.status(500).send(err);
+		if(!project) return res.status(404).send('Project Not Found');
 
 		return res.send(project.toClient());
 	});
 })
 .put(isAdmin, (req, res) => {
 	// Update a given project
-	console.log('PUT to /project/:projectId');
+	console.log(`PUT /project/${req.params.projectId}`);
 	console.log(req.body);
 
-	Project.update({_id: req.projectId}, {
+	const query = {
+		_id: req.params.projectId
+	};
+
+	const update = {
 		$set: req.body
-	}, (err) => {
+	};
+
+	Project.update(query, update, (err) => {
 		if (err) return res.status(500).send(err);
 
-		Project.get(req.projectId, (err, project) => {
+		Project.getById(req.params.projectId, (err, project) => {
 			if (err) return res.status(500).send(err);
+			if(!project) return res.status(404).send('Project Not Found');
 
 			return res.send(project.toClient());
 		});
@@ -84,8 +83,13 @@ router.route('/:projectId')
 })
 .delete(isAdmin, (req, res) => {
 	// Delete a given project
-	console.log('DELETE to /project/:projectId');
-	Project.findOneAndRemove({_id: req.projectId}, (err, project) => {
+	console.log(`DELETE /project/${req.params.projectId}`);
+
+	const query = {
+		_id: req.params.projectId
+	};
+
+	Project.remove(query, (err, project) => {
 		if (err) return res.status(500).send(err);
 
 		return res.send(project.toClient());
@@ -96,35 +100,18 @@ router.route('/:projectId')
 /**
  *
  */
-router.route('/:projectId/team')
+router.route('/:projectId/teams')
 .get((req, res) => {
 	// Get all teams for a given project
-	console.log('GET to /project/:projectId/team');
-	Project.get(req.projectId, (err, project) => {
+	console.log(`GET /project/${req.params.projectId}/teams`);
+
+	Team.getByProjectId(req.params.projectId, (err, teams) => {
 		if (err) return res.status(500).send(err);
+		if (!teams) return res.status(404).send('No Teams Found for Project');
 
-		return res.send(project.teams);
-	});
-})
-.post((req, res) => {
-	// Create a new team for a given project
-	console.log('POST to /project/:projectId/team');
-	let team = req.body;
+		teams = teams.map(team => team.toClient());
 
-	if (!team.name) return res.status(500).send(new Error('Attempt to create a new team with no name'));
-
-	Project.update({_id: req.projectId}, {
-		$push: {
-			teams: team
-		}
-	}, (err) => {
-		if (err) return res.status(500).send(err);
-
-		Project.get(req.projectId, (err, project) => {
-			if (err) return res.status(500).send(err);
-
-			return res.send(project.toClient());
-		});
+		return res.send(teams);
 	});
 });
 

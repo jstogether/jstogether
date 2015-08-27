@@ -3,7 +3,7 @@ import Constant from '../constant/app';
 
 export default {
 	/**
-	 *
+	 * Session
 	 */
 	loginSuccess (user) {
 		AppDispatcher.dispatch({
@@ -52,22 +52,12 @@ export default {
 	},
 
 	/**
-	 *
+	 * Projects
 	 */
 	fetchProjectsSuccess (projects) {
 		AppDispatcher.dispatch({
 			actionType: Constant.FETCH_PROJECTS_SUCCESS,
 			projects
-		});
-	},
-
-	/**
-	 *
-	 */
-	fetchUsersSuccess (users) {
-		AppDispatcher.dispatch({
-			actionType: Constant.FETCH_USERS_SUCCESS,
-			users
 		});
 	},
 
@@ -122,9 +112,41 @@ export default {
 	},
 
 	/**
+	 * Users
+	 */
+	fetchUsersSuccess (users) {
+		AppDispatcher.dispatch({
+			actionType: Constant.FETCH_USERS_SUCCESS,
+			users
+		});
+	},
+
+	/**
+	 * Teams
+	 */
+	fetchTeamsSuccess (teams) {
+		AppDispatcher.dispatch({
+			actionType: Constant.FETCH_TEAMS_SUCCESS,
+			teams
+		});
+	},
+
+	/**
 	 *
 	 */
-	fail (e) {
-		console.log('Server Action Failed: ', e);
+	fetchTeamsFail () {
+		AppDispatcher.dispatch({
+			actionType: Constant.FETCH_TEAMS_FAIL
+		});
+	},
+
+	/**
+	 *
+	 */
+	createTeamSuccess (team) {
+		AppDispatcher.dispatch({
+			actionType: Constant.CREATE_TEAM_SUCCESS,
+			team
+		});
 	}
 };

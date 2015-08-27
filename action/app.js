@@ -4,6 +4,7 @@ import ServerActions from './server';
 
 import UserApi from '../api/user';
 import ProjectApi from '../api/project';
+import TeamApi from '../api/team';
 
 export default {
 	/**
@@ -128,6 +129,21 @@ export default {
 	/**
 	 *
 	 */
+	updateProject (projectId, project) {
+		AppDispatcher.dispatch({
+			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
+			projectId,
+			project
+		});
+
+		ProjectApi.updateProject(projectId, project)
+		.done(ServerActions.updateProjectSuccess)
+		.fail(ServerActions.fail);
+	},
+
+	/**
+	 *
+	 */
 	deleteProject (projectId) {
 		AppDispatcher.dispatch({
 			actionType: Constant.DELETE_PROJECT_ATTEMPT,
@@ -137,6 +153,15 @@ export default {
 		ProjectApi.deleteProject(projectId)
 		.done(ServerActions.deleteProjectSuccess)
 		.fail(ServerActions.deleteProjectFail);
+	},
+
+	/**
+	 *
+	 */
+	showCreateProject () {
+		AppDispatcher.dispatch({
+			actionType: Constant.SHOW_CREATE_PROJECT
+		});
 	},
 
 	/**
@@ -162,41 +187,29 @@ export default {
 	},
 
 	/**
-	 *
+	 * Teams
 	 */
-	updateProject (projectId, project) {
+	fetchTeams () {
 		AppDispatcher.dispatch({
-			actionType: Constant.UPDATE_PROJECT_ATTEMPT,
-			projectId,
-			project
+			actionType: Constant.FETCH_TEAMS_ATTEMPT
 		});
 
-		ProjectApi.updateProject(projectId, project)
-		.done(ServerActions.updateProjectSuccess)
-		.fail(ServerActions.fail);
+		TeamApi.fetchTeams()
+		.done(ServerActions.fetchTeamsSuccess)
+		.fail(ServerActions.fetchTeamsFail);
 	},
 
 	/**
 	 *
 	 */
-	showCreateProject () {
-		AppDispatcher.dispatch({
-			actionType: Constant.SHOW_CREATE_PROJECT
-		});
-	},
-
-	/**
-	 *
-	 */
-	createTeam (projectId, team) {
+	createTeam (team) {
 		AppDispatcher.dispatch({
 			actionType: Constant.CREATE_TEAM_ATTEMPT,
-			projectId,
 			team
 		});
 
-		ProjectApi.createTeam(projectId, team)
-		.done(ServerActions.updateProjectSuccess)
+		TeamApi.createTeam(team)
+		.done(ServerActions.createTeamSuccess)
 		.fail(ServerActions.fail);
 	}
 };

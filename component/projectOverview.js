@@ -10,6 +10,7 @@ import Team from './team';
 import AppActions from '../action/app';
 
 import SessionStore from '../store/session';
+import TeamStore from '../store/team';
 
 const dateFormat = 'Do MMM YYYY HH:mm:ss';
 const scopes = ['solo', 'peer', 'group'];
@@ -25,12 +26,11 @@ export default class ProjectOverview extends Component {
 		this._bind(
 			'renderProjectTitle',
 			'renderProjectScope',
-			'renderEditButton',
+			'renderButtons',
 			'renderDescription',
 			'renderProjectSummary',
 			'renderJoinProjectDialog',
 			'renderTeams',
-			'renderSaveButtons',
 			'onNumberChange',
 			'onNameChange',
 			'onScopeClick',
@@ -49,12 +49,27 @@ export default class ProjectOverview extends Component {
 			'onCreateTeamClick',
 			'onSaveEditsClick',
 			'onDeleteProjectClick',
-			'onCancelEditClick'
+			'onCancelEditClick',
+			'onTeamStoreChange'
 		);
 
 		this.state = {
 			editing: false,
 		};
+	}
+
+	/**
+	 *
+	 */
+	componentDidMount () {
+		TeamStore.addChangeListener(this.onTeamStoreChange);
+	}
+
+	/**
+	 *
+	 */
+	componentWillUnmount () {
+		TeamStore.removeChangeListener(this.onTeamStoreChange);
 	}
 
 	/**
@@ -77,7 +92,7 @@ export default class ProjectOverview extends Component {
 
 				{this.renderProjectScope(editing, project)}
 
-				{this.renderEditButton(editing, project)}
+				{this.renderButtons(editing, project)}
 
 				<br />
 
@@ -86,10 +101,6 @@ export default class ProjectOverview extends Component {
 				{this.renderProjectSummary(editing, project)}
 
 				{this.renderJoinProjectDialog(editing, project)}
-
-				<hr />
-
-				{this.renderSaveButtons(editing, project)}
 
 				{this.renderTeams(editing, project)}
 			</div>
@@ -154,19 +165,21 @@ export default class ProjectOverview extends Component {
 	/**
 	 *
 	 */
-	renderEditButton (editing, project) {
+	renderButtons (editing, project) {
 		if (!SessionStore.isAdmin()) return null;
 
+		const buttons = [];
 		const text = editing ? 'Cancel Edit' : 'Edit';
-		const handler = editing ? this.onCancelEditClick : this.toggleEditing;
+		const editButtonHandler = editing ? this.onCancelEditClick : this.toggleEditing;
 
-		return (
-			<button
-				className='editBtn'
-				onClick={handler}>
-				{text}
-			</button>
-		);
+		buttons.push(<button className='editBtn' onClick={editButtonHandler}>{text}</button>);
+
+		if (editing) {
+			buttons.push(<button onClick={this.onSaveEditsClick}>{'Save'}</button>);
+			buttons.push(<button onClick={this.onDeleteProjectClick}>{'Delete Project'}</button>);
+		}
+
+		return buttons;
 	}
 
 	/**
@@ -314,25 +327,14 @@ export default class ProjectOverview extends Component {
 	 *
 	 */
 	renderTeams (editing, project) {
-		const teams = project.teams.map(team => <Team team={team} />);
+		let teams = TeamStore.getByProjectId(project.id);
+		teams = teams.map(team => <Team team={team} />);
 
 		return (
 			<div className='teams'>
 				{teams}
 			</div>
 		);
-	}
-
-	/**
-	 *
-	 */
-	renderSaveButtons (editing, project) {
-		if (!editing) return null;
-
-		return [
-			<button onClick={this.onSaveEditsClick}>{'Save'}</button>,
-			<button onClick={this.onDeleteProjectClick}>{'Delete Project'}</button>
-		];
 	}
 
 	/**
@@ -557,19 +559,19 @@ export default class ProjectOverview extends Component {
 	 *
 	 */
 	onCreateTeamClick () {
-		const name = React.findDOMNode(this.refs.teamName).value;
-		const user = SessionStore.getUser();
-		const users = [
-			user.username
-		];
+		const team = {
+			name: React.findDOMNode(this.refs.teamName).value,
+			users: [SessionStore.getUser().username],
+			projectId: this.props.project.id
+		};
 
-		if (name) {
-			const team = {
-				name,
-				users
-			};
+		AppActions.createTeam(team);
+	}
 
-			AppActions.createTeam(this.props.project.id, team);
-		}
+	/**
+	 *
+	 */
+	onTeamStoreChange () {
+		this._forceUpdate();
 	}
 }

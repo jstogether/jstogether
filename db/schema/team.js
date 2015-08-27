@@ -1,13 +1,21 @@
 import mongoose from 'mongoose';
 
-let Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 
-let TeamSchema = new Schema({
+const TeamSchema = new Schema({
 	name: {
 		type: String,
 		default: 'Team'
 	},
-	users: [String]
+	projectId: {
+		type: ObjectId,
+		required: true
+	},
+	users: {
+		type: [String],
+		default: []
+	}
 });
 
 
@@ -15,18 +23,36 @@ let TeamSchema = new Schema({
  *
  */
 TeamSchema.methods.toClient = function () {
-	let project = {
+	const project = {
 		id: this._id,
 		name: this.name,
-		users: this.users
+		users: this.users,
+		projectId: this.projectId
 	};
 
 	return project;
 };
 
-TeamSchema.statics.get = function (id, done) {
-	return this.findOne({_id: id}, done);
+/**
+ *
+ */
+TeamSchema.statics.getById = function (id, done) {
+	const query = {
+		_id: id
+	};
+
+	return this.findOne(query, done);
 };
 
+/**
+ *
+ */
+TeamSchema.statics.getByProjectId = function (projectId, done) {
+	const query = {
+		projectId
+	};
+
+	return this.find(query, done);
+}
 
 export default TeamSchema;
