@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 import UserSchema from './schema/user';
 import ProjectSchema from './schema/project';
+import TeamSchema from './schema/team';
 
 import config from '../config';
 
@@ -21,5 +22,6 @@ else {
 
 connection.model('User', UserSchema);
 connection.model('Project', ProjectSchema);
+connection.model('Team', TeamSchema);
 
 export default connection;
