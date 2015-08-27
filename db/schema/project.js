@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import TeamSchema from './team';
 
 let Schema = mongoose.Schema;
 
@@ -66,12 +65,7 @@ let ProjectSchema = new Schema({
 	 * Keywords for this project
 	 * EG: ["nodejs", "react", "mongodb"]
 	 */
-	keywords: [String],
-
-	/**
-	 * The teams that have taken on the project
-	 */
-	teams: [TeamSchema]
+	keywords: [String]
 });
 
 
@@ -89,14 +83,13 @@ ProjectSchema.methods.toClient = function () {
 		requirements: this.requirements,
 		extensions: this.extensions,
 		help: this.help,
-		keywords: this.keywords,
-		teams: this.teams
+		keywords: this.keywords
 	};
 
 	return project;
 };
 
-ProjectSchema.statics.get = function (id, done) {
+ProjectSchema.statics.getById = function (id, done) {
 	return this.findOne({_id: id}, done);
 };
 

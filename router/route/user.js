@@ -3,16 +3,18 @@ import React from 'react';
 
 import db from '../../db';
 
-let User = db.model('User');
-let router = express.Router();
+const User = db.model('User');
+const router = express.Router();
 
+/**
+ *
+ */
+router.route('/:username')
+.get((req, res) => {
+	// Get User by username
+	console.log('GET to /users/' + req.params.username);
 
-// Get User by username
-router.get('/:username', (req, res) => {
-
-	User.findOne({
-		username: req.params.username
-	}, (err, user) => {
+	User.getByUsername(req.params.username, (err, user) => {
 		if (err) return res.sendStatus(500);
 		if (!user) return res.sendStatus(404);
 
@@ -20,9 +22,14 @@ router.get('/:username', (req, res) => {
 	});
 });
 
+/**
+ *
+ */
+router.route('/')
+.get((req, res) => {
+	// Get existing users
+	console.log('GET to /users/');
 
-// Get existing users
-router.get('/', (req, res) => {
 	User.find((err, users) => {
 		if (err) return res.sendStatus(500);
 		if (!users) return res.sendStatus(404);

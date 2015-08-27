@@ -56,50 +56,50 @@ UserSchema.methods.toClient = function () {
 /**
  *
  */
-UserSchema.statics.get = function (username, done) {
+UserSchema.statics.getByUsername = function (username, done) {
 	this.findOne({username}, done);
 };
 
 /**
  *
  */
-UserSchema.statics.findOrCreate = function (conditions, doc, options, callback) {
+UserSchema.statics.findOrCreate = function (query, doc, options, done) {
 	if (arguments.length < 4) {
 		if (typeof options === 'function') {
-			// Scenario: findOrCreate(conditions, doc, callback)
-			callback = options;
+			// Scenario: findOrCreate(query, doc, done)
+			done = options;
 			options = {};
 		}
 		else if (typeof doc === 'function') {
-			// Scenario: findOrCreate(conditions, callback);
-			callback = doc;
+			// Scenario: findOrCreate(query, done);
+			done = doc;
 			doc = {};
 			options = {};
 		}
 	}
 
-	this.findOne(conditions, (err, result) => {
-		if (err || result) {
+	this.findOne(query, (err, user) => {
+		if (err || user) {
 			if (options && options.upsert && !err) {
-				this.update(conditions, doc, (err, count) => {
-					this.findOne(conditions, (err, result) => {
-						callback(err, result, false);
+				this.update(query, doc, (err, count) => {
+					this.findOne(query, (err, user) => {
+						done(err, user, false);
 					});
 				});
 			}
 			else {
-				callback(err, result, false)
+				done(err, user, false)
 			}
 		}
 		else {
 			for (var key in doc) {
-				conditions[key] = doc[key]; 
+				query[key] = doc[key]; 
 			}
 
-			var obj = new this(conditions)
+			var obj = new this(query)
 
 			obj.save(err => {
-				callback(err, obj, true);
+				done(err, obj, true);
 			});
 		}
 	});
