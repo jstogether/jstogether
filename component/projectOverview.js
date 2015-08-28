@@ -315,15 +315,17 @@ export default class ProjectOverview extends Component {
 	 *
 	 */
 	renderJoinProjectDialog (editing, project) {
-		return (
-			<div className='join'>
-				<span>{'To get onboard with this project, either create a new Team or join an existing one!'}</span>
-				<br />
-				<input type='text' ref='teamName' name='teamName' placeholder='Team Name' />
-				<br />
-				<button onClick={this.onCreateTeamClick}>{'Create New Team'}</button>
-			</div>
-		);
+		if (!this.props.userTeam || SessionStore.isAdmin()) {
+			return (
+				<div className='join'>
+					<span>{'To get onboard with this project, either create a new Team or join an existing one!'}</span>
+					<br />
+					<input type='text' ref='teamName' name='teamName' placeholder='Team Name' />
+					<br />
+					<button onClick={this.onCreateTeamClick}>{'Create New Team'}</button>
+				</div>
+			);
+		}
 	}
 
 	/**
@@ -566,12 +568,15 @@ export default class ProjectOverview extends Component {
 	 *
 	 */
 	onCreateTeamClick () {
+		const teamNameInput = React.findDOMNode(this.refs.teamName);
+
 		const team = {
-			name: React.findDOMNode(this.refs.teamName).value,
+			name: teamNameInput.value,
 			users: [SessionStore.getUser().username],
 			projectId: this.props.project.id
 		};
 
+		teamNameInput.value = '';
 		AppActions.createTeam(team);
 	}
 
