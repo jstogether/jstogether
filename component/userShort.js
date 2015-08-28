@@ -18,7 +18,7 @@ export default class UserShort extends Component {
 	 */
 	render () {
 		return (
-			<span onClick={this.onClick}>{this.props.user.username}</span>
+			<span className='userShort' onClick={this.onClick}>{this.props.user.username}</span>
 		);
 	}
 

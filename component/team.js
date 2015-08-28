@@ -18,7 +18,9 @@ export default class Team extends Component {
 			'renderButtons',
 			'onJoinTeamClick',
 			'onLeaveTeamClick',
-			'onDeleteTeamClick'
+			'onDeleteTeamClick',
+			'onGithubClick',
+			'onDeployedClick'
 		);
 	}
 
@@ -29,6 +31,8 @@ export default class Team extends Component {
 		const team = this.props.team;
 		const users = UserStore.getMulti(team.users).map(user => <UserShort user={user} />);
 		const buttons = this.renderButtons();
+		const myTeam = this.props.isMyTeam;
+		const isAdmin = SessionStore.isAdmin();
 
 		return (
 			<div className='team'>
@@ -37,10 +41,14 @@ export default class Team extends Component {
 					<tbody>
 						<tr>
 							<th><span>{'Github Repository:'}</span></th>
-							<td><span>{team.githubUrl || '<none>'}</span></td>
+							<td><span onClick={this.onGithubClick}>
+								{team.githubUrl}
+							</span></td>
 						</tr><tr>
 							<th><span>{'Deployed Project:'}</span></th>
-							<td><span>{team.deployedUrl || '<none>'}</span></td>
+							<td><span onClick={this.onDeployedClick}>
+								{team.deployedUrl}
+							</span></td>
 						</tr><tr>
 							<th><span>{'Users:'}</span></th>
 							<td><span>{users || '<none>'}</span></td>
@@ -65,13 +73,13 @@ export default class Team extends Component {
 			);
 		}
 
-		if (this.props.canLeave) {
+		if (this.props.isMyTeam) {
 			buttons.push(
 				<button onClick={this.onLeaveTeamClick}>{'Leave Team'}</button>
 			);
 		}
 
-		if (SessionStore.isAdmin()) {
+		if (this.props.isMyTeam || SessionStore.isAdmin()) {
 			buttons.push(
 				<button onClick={this.onDeleteTeamClick}>{'Delete'}</button>
 			);
@@ -98,6 +106,30 @@ export default class Team extends Component {
 	 *
 	 */
 	onDeleteTeamClick () {
-		AppActions.deleteTeam(this.props.team);
+		if (confirm('Really Delete Team ' + this.props.team.name)) {
+			AppActions.deleteTeam(this.props.team);
+		}
+	}
+
+	/**
+	 *
+	 */
+	onGithubClick () {
+		const newValue = prompt('New Github Repository:');
+
+		if (newValue) {
+			AppActions.updateTeamGithubRepository(this.props.team, newValue);
+		}
+	}
+
+	/**
+	 *
+	 */
+	onDeployedClick (e) {
+		const newValue = prompt('New Deployed URL:');
+
+		if (newValue) {
+			AppActions.updateTeamDeployedUrl(this.props.team, newValue);
+		}
 	}
 }
