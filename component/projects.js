@@ -59,6 +59,7 @@ export default class Projects extends Page {
 	 */
 	componentDidMount () {
 		ProjectStore.addChangeListener(this.onStoreChange);
+		TeamStore.addChangeListener(this.onStoreChange);
 	}
 
 	/**
@@ -66,6 +67,7 @@ export default class Projects extends Page {
 	 */
 	componentWillUnmount () {
 		ProjectStore.removeChangeListener(this.onStoreChange);
+		TeamStore.removeChangeListener(this.onStoreChange);
 	}
 
 	/**
