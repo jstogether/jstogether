@@ -63,7 +63,7 @@ class ProjectStore extends Store {
 				this.data.currentProject = project;
 
 				this.emitChange();
-				break;
+				return;
 			}
 		}
 	}
@@ -78,7 +78,7 @@ class ProjectStore extends Store {
 				this.data.currentProject = null;
 
 				this.emitChange();
-				break;
+				return;
 			}
 		}
 	}

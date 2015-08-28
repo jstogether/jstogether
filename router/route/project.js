@@ -89,10 +89,10 @@ router.route('/:projectId')
 		_id: req.params.projectId
 	};
 
-	Project.remove(query, (err, project) => {
+	Project.remove(query, (err) => {
 		if (err) return res.status(500).send(err);
 
-		return res.send(project.toClient());
+		return res.send({id: req.params.projectId});
 	});
 });
 
