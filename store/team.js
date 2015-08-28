@@ -69,6 +69,26 @@ class TeamStore extends Store {
 			}
 		}
 	}
+
+	/**
+	 *
+	 */
+	onJoinTeam(user, team) {
+		team.users.push(user.username);
+		this.emitChange();
+	}
+
+	/**
+	 *
+	 */
+	onLeaveTeam(user, team) {
+		const index = team.users.indexOf(user.username);
+
+		if (index > -1) {
+			team.users.splice(index, 1);
+			this.emitChange();
+		}
+	}
 };
 
 let teamStore = new TeamStore();
@@ -85,6 +105,12 @@ AppDispatcher.register((action) => {
 	break;
 	case Constant.CREATE_TEAM_SUCCESS:
 		teamStore.onCreateTeamSuccess(action.team);
+	break;
+	case Constant.JOIN_TEAM_ATTEMPT:
+		teamStore.onJoinTeam(action.user, action.team);
+	break;
+	case Constant.LEAVE_TEAM_ATTEMPT:
+		teamStore.onLeaveTeam(action.user, action.team);
 	break;
 	case Constant.UPDATE_TEAM_SUCCESS:
 		teamStore.onUpdateTeamSuccess(action.team);
