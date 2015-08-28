@@ -5,13 +5,33 @@ import AppActions from '../action/app';
 
 import ProjectStore from '../store/project';
 import SessionStore from '../store/session';
+import TeamStore from '../store/team';
 
 import ProjectOverview from './projectOverview';
 
 function getState () {
+	const currentProject = ProjectStore.getCurrentProject();
+	const username = SessionStore.getUser().username;
+	const projects = ProjectStore.getProjects();
+	let userTeam;
+
+	if (currentProject) {
+		const teams = TeamStore.getByProjectId(currentProject.id);
+
+		teams.every(team => {
+			if (team.users.indexOf(username) > -1) {
+				userTeam = team;
+				return false;
+			}
+
+			return true;
+		});
+	}
+
 	return {
-		currentProject: ProjectStore.getCurrentProject(),
-		projects: ProjectStore.getProjects()
+		currentProject,
+		projects,
+		userTeam
 	};
 }
 
@@ -92,17 +112,9 @@ export default class Projects extends Page {
 				<div><span>{'Nothing to see here...'}</span></div>
 			);
 		}
-		else if (project === 'createNew') {
-			return (
-				<div className='projectOverview'>
-					<h1 >{'Projects'}</h1>
-					<CreateProject />
-				</div>
-			);
-		}
 
 		return (
-			<ProjectOverview key={project.id} project={project} />
+			<ProjectOverview key={project.id} project={project} userTeam={this.state.userTeam} />
 		);
 	}
 
