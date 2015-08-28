@@ -127,6 +127,11 @@ AppDispatcher.register((action) => {
 	case Constant.DELETE_PROJECT_FAIL:
 		console.log('Failed to delete project: ', action.err);
 	break;
+	case Constant.LEAVE_TEAM_SUCCESS:
+	case Constant.JOIN_TEAM_SUCCESS:
+	case Constant.DELETE_TEAM_SUCCESS:
+		projectStore.emitChange();
+	break;
 	}
 });
 
