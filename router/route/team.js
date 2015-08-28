@@ -41,4 +41,73 @@ router.route('/')
 	});	
 });
 
+/**
+ *
+ */
+router.route('/:teamId/join')
+.put((req, res) => {
+	console.log(`PUT to /team/${req.params.teamId}/join`);
+	console.log(req.user.username);
+
+	const query = {
+		_id: req.params.teamId
+	};
+
+	const update = {
+		$push: {
+			users: req.user.username
+		}
+	};
+
+	Team.update(query, update, (err) => {
+		if (err) return res.status(500).send(err);
+
+		return res.sendStatus(200);
+	});
+});
+
+/**
+ *
+ */
+router.route('/:teamId/leave')
+.put((req, res) => {
+	console.log(`PUT to /team/${req.params.teamId}/leave`);
+	console.log(req.user.username);
+
+	const query = {
+		_id: req.params.teamId,
+		users: req.user.username
+	};
+
+	const update = {
+		$pull: {
+			users: req.user.username
+		}
+	};
+
+	Team.update(query, update, (err) => {
+		if (err) return res.status(500).send(err);
+
+		return res.sendStatus(200);
+	});
+});
+
+/**
+ *
+ */
+router.route('/:teamId')
+.delete((req, res) => {
+	console.log(`DELETE to /team/${req.params.teamId}`);
+
+	const query = {
+		_id: req.params.teamId
+	};
+
+	Team.remove(query, (err) => {
+		if (err) return res.status(500).send(err);
+
+		return res.send({id: req.params.teamId});
+	});
+});
+
 export default router;
