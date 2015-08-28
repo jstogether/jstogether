@@ -331,7 +331,7 @@ export default class ProjectOverview extends Component {
 	 */
 	renderTeams (editing, project) {
 		let teams = TeamStore.getByProjectId(project.id);
-		teams = teams.map(team => <Team team={team} />);
+		teams = teams.map(team => <Team team={team} canJoin={!this.props.userTeam} canLeave={team === this.props.userTeam} />);
 
 		const joinProjectDialog = this.renderJoinProjectDialog(editing, project);
 
