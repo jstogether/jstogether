@@ -28,6 +28,16 @@ export default {
 	/**
 	 *
 	 */
+	updateTeam (team) {
+		return $.ajax(`/team/${team.id}/`, {
+			method: 'PUT',
+			data: team
+		});
+	},
+
+	/**
+	 *
+	 */
 	joinTeam (user, team) {
 		return $.ajax(`/team/${team.id}/join`, {
 			method: 'PUT'
