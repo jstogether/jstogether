@@ -163,6 +163,17 @@ export default {
 	/**
 	 *
 	 */
+	updateTeamSuccess (team) {
+		console.log('update success', team);
+		AppDispatcher.dispatch({
+			actionType: Constant.UPDATE_TEAM_SUCCESS,
+			team
+		});
+	},
+
+	/**
+	 *
+	 */
 	joinTeamSuccess () {
 		AppDispatcher.dispatch({
 			actionType: Constant.JOIN_TEAM_SUCCESS

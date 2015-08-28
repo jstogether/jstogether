@@ -255,5 +255,37 @@ export default {
 		TeamApi.leaveTeam(user, team)
 		.done(ServerActions.leaveTeamSuccess)
 		.fail(ServerActions.leaveTeamFail);
+	},
+
+	/**
+	 *
+	 */
+	updateTeamGithubRepository (team, url) {
+		team.githubUrl = url;
+
+		AppDispatcher.dispatch({
+			actionType: Constant.UPDATE_TEAM_ATTEMPT,
+			team
+		});
+
+		TeamApi.updateTeam(team)
+		.done(ServerActions.updateTeamSuccess)
+		.fail(ServerActions.updateTeamFail);
+	},
+
+	/**
+	 *
+	 */
+	updateTeamDeployedUrl (team, url) {
+		team.deployedUrl = url;
+
+		AppDispatcher.dispatch({
+			actionType: Constant.UPDATE_TEAM_ATTEMPT,
+			team
+		});
+
+		TeamApi.updateTeam(team)
+		.done(ServerActions.updateTeamSuccess)
+		.fail(ServerActions.updateTeamFail);
 	}
 };
