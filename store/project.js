@@ -63,7 +63,7 @@ class ProjectStore extends Store {
 				this.data.currentProject = project;
 
 				this.emitChange();
-				break;
+				return;
 			}
 		}
 	}
@@ -78,7 +78,7 @@ class ProjectStore extends Store {
 				this.data.currentProject = null;
 
 				this.emitChange();
-				break;
+				return;
 			}
 		}
 	}
@@ -126,6 +126,11 @@ AppDispatcher.register((action) => {
 	break;
 	case Constant.DELETE_PROJECT_FAIL:
 		console.log('Failed to delete project: ', action.err);
+	break;
+	case Constant.LEAVE_TEAM_SUCCESS:
+	case Constant.JOIN_TEAM_SUCCESS:
+	case Constant.DELETE_TEAM_SUCCESS:
+		projectStore.emitChange();
 	break;
 	}
 });

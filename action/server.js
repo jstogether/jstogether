@@ -148,5 +148,33 @@ export default {
 			actionType: Constant.CREATE_TEAM_SUCCESS,
 			team
 		});
+	},
+
+	/**
+	 *
+	 */
+	deleteTeamSuccess (team) {
+		AppDispatcher.dispatch({
+			actionType: Constant.DELETE_TEAM_SUCCESS,
+			team
+		});
+	},
+
+	/**
+	 *
+	 */
+	joinTeamSuccess () {
+		AppDispatcher.dispatch({
+			actionType: Constant.JOIN_TEAM_SUCCESS
+		});
+	},
+
+	/**
+	 *
+	 */
+	leaveTeamSuccess () {
+		AppDispatcher.dispatch({
+			actionType: Constant.LEAVE_TEAM_SUCCESS
+		});
 	}
 };

@@ -90,17 +90,9 @@ export default class ProjectOverview extends Component {
 			<div className={this.getClassName()}>
 				{this.renderProjectTitle(editing, project)}
 
-				{this.renderProjectScope(editing, project)}
-
-				{this.renderButtons(editing, project)}
-
-				<br />
-
 				{this.renderDescription(editing, project)}
 
 				{this.renderProjectSummary(editing, project)}
-
-				{this.renderJoinProjectDialog(editing, project)}
 
 				{this.renderTeams(editing, project)}
 			</div>
@@ -111,32 +103,43 @@ export default class ProjectOverview extends Component {
 	 *
 	 */
 	renderProjectTitle (editing, project) {
+		const scope = this.renderProjectScope(editing, project);
+		const buttons = this.renderButtons(editing, project);
+
 		if (editing) {
 			return (
-				<h2 className='title editing'>
-					{'Project '}
+				<div className='projectTitle'>
+					<h2 className='title editing'>
+						{'Project '}
 
-					<input
-						type='text'
-						className='number textStyle'
-						value={project.number}
-						onChange={this.onNumberChange} />
+						<input
+							type='text'
+							className='number textStyle'
+							value={project.number}
+							onChange={this.onNumberChange} />
 
-					<span>{': '}</span>
+						<span>{': '}</span>
 
-					<input
-						type='text'
-						className='name textStyle'
-						value={project.name}
-						onChange={this.onNameChange} />
-				</h2>
+						<input
+							type='text'
+							className='name textStyle'
+							value={project.name}
+							onChange={this.onNameChange} />
+					</h2>
+					{scope}
+					{buttons}
+				</div>
 			);
 		}
 
 		return (
+			<div className='projectTitle'>
 				<h2 className='title'>
 					{'Project ' + project.number + ': ' + project.name}
 				</h2>
+				{scope}
+				{buttons}
+			</div>
 		);		
 	}
 
@@ -312,15 +315,17 @@ export default class ProjectOverview extends Component {
 	 *
 	 */
 	renderJoinProjectDialog (editing, project) {
-		return (
-			<div className='join'>
-				<span>{'To get onboard with this project, either create a new Team or join an existing one!'}</span>
-				<br />
-				<input type='text' ref='teamName' name='teamName' placeholder='Team Name' />
-				<br />
-				<button onClick={this.onCreateTeamClick}>{'Create New Team'}</button>
-			</div>
-		);
+		if (!this.props.userTeam || SessionStore.isAdmin()) {
+			return (
+				<div className='join'>
+					<span>{'To get onboard with this project, either create a new Team or join an existing one!'}</span>
+					<br />
+					<input type='text' ref='teamName' name='teamName' placeholder='Team Name' />
+					<br />
+					<button onClick={this.onCreateTeamClick}>{'Create New Team'}</button>
+				</div>
+			);
+		}
 	}
 
 	/**
@@ -328,13 +333,17 @@ export default class ProjectOverview extends Component {
 	 */
 	renderTeams (editing, project) {
 		let teams = TeamStore.getByProjectId(project.id);
-		teams = teams.map(team => <Team team={team} />);
+		teams = teams.map(team => <Team team={team} canJoin={!this.props.userTeam} canLeave={team === this.props.userTeam} />);
 
-		return (
-			<div className='teams'>
+		const joinProjectDialog = this.renderJoinProjectDialog(editing, project);
+
+		return [
+			<h3 key='teamTitle'>{'Teams'}</h3>,
+			{joinProjectDialog},
+			<div key='teams' className='teams'>
 				{teams}
 			</div>
-		);
+		];
 	}
 
 	/**
@@ -559,12 +568,15 @@ export default class ProjectOverview extends Component {
 	 *
 	 */
 	onCreateTeamClick () {
+		const teamNameInput = React.findDOMNode(this.refs.teamName);
+
 		const team = {
-			name: React.findDOMNode(this.refs.teamName).value,
+			name: teamNameInput.value,
 			users: [SessionStore.getUser().username],
 			projectId: this.props.project.id
 		};
 
+		teamNameInput.value = '';
 		AppActions.createTeam(team);
 	}
 

@@ -1,22 +1,41 @@
-import React from 'react'
-import Component from './component';
+import React from 'react';
+import Page from './page';
 
 import AppActions from '../action/app';
 
-import ProjectOverview from './projectOverview';
-import CreateProject from './createProject';
-
 import ProjectStore from '../store/project';
 import SessionStore from '../store/session';
+import TeamStore from '../store/team';
+
+import ProjectOverview from './projectOverview';
 
 function getState () {
+	const currentProject = ProjectStore.getCurrentProject();
+	const username = SessionStore.getUser().username;
+	const projects = ProjectStore.getProjects();
+	let userTeam;
+
+	if (currentProject) {
+		const teams = TeamStore.getByProjectId(currentProject.id);
+
+		teams.every(team => {
+			if (team.users.indexOf(username) > -1) {
+				userTeam = team;
+				return false;
+			}
+
+			return true;
+		});
+	}
+
 	return {
-		currentProject: ProjectStore.getCurrentProject(),
-		projects: ProjectStore.getProjects()
+		currentProject,
+		projects,
+		userTeam
 	};
 }
 
-export default class Projects extends Component {
+export default class Projects extends Page {
 	/**
 	 *
 	 */
@@ -24,9 +43,12 @@ export default class Projects extends Component {
 		super();
 
 		this._bind(
-			'renderCurrentProject',
-			'onProjectStoreChange',
-			'onCreateProjectClick'
+			'renderHeaderItem',
+			'renderItem',
+			'renderContent',
+			'generateItemClickHandler',
+			'onCreateProjectClick',
+			'onStoreChange'
 		);
 
 		this.state = getState();
@@ -36,58 +58,55 @@ export default class Projects extends Component {
 	 *
 	 */
 	componentDidMount () {
-		ProjectStore.addChangeListener(this.onProjectStoreChange);
+		ProjectStore.addChangeListener(this.onStoreChange);
+		TeamStore.addChangeListener(this.onStoreChange);
 	}
 
 	/**
 	 *
 	 */
 	componentWillUnmount () {
-		ProjectStore.removeChangeListener(this.onProjectStoreChange);
+		ProjectStore.removeChangeListener(this.onStoreChange);
+		TeamStore.removeChangeListener(this.onStoreChange);
 	}
 
 	/**
 	 *
 	 */
 	render () {
-		const currentProject = this.state.currentProject;
-		const renderedProject = this.renderCurrentProject();
-		const createProjectBtn = SessionStore.isAdmin() ? <button onClick={this.onCreateProjectClick}>{'New'}</button> : null;
-		
-		const projectList = this.state.projects.map((project, i) => {
-			const selectedProject = project === currentProject ? ' selected' : '';
-
-			return (
-				<li key={i} className={'itemShort' + selectedProject} onClick={this.createOnProjectClickHandler(project)}>
-					<span>{project.name}</span>
-				</li>
-			);
+		return this.renderPage({
+			items: this.state.projects,
+			selectedItem: this.state.currentProject
 		});
+	}
 
+	/**
+	 *
+	 */
+	renderHeaderItem () {
+		const createProjectBtn = SessionStore.isAdmin() ?
+			<button onClick={this.onCreateProjectClick}>{'New'}</button> :
+			null;
+
+		return [
+			<span>{'Projects'}</span>,
+			{createProjectBtn}
+		];
+	}
+
+	/**
+	 *
+	 */
+	renderItem (project) {
 		return (
-			<div className='pageContainer'>
-				<div className='listContainer'>
-					<ul className='list' onClick={this.onProjectClick}>
-						<li className='itemShort rootItem' onClick={this.createOnProjectClickHandler(null)}>
-							<span>{'Projects'}</span>
-							{createProjectBtn}
-						</li>
-
-						{projectList}
-					</ul>
-				</div>
-
-				<div className={'contentContainer'}>
-					{renderedProject}
-				</div>
-			</div>
+			<span>{project.name}</span>
 		);
 	}
 
 	/**
 	 *
 	 */
-	renderCurrentProject () {
+	renderContent () {
 		const project = this.state.currentProject;
 
 		if (!project) {
@@ -95,18 +114,19 @@ export default class Projects extends Component {
 				<div><span>{'Nothing to see here...'}</span></div>
 			);
 		}
-		else if (project === 'createNew') {
-			return (
-				<div className='projectOverview'>
-					<h1 >{'Projects'}</h1>
-					<CreateProject />
-				</div>
-			);
-		}
 
 		return (
-			<ProjectOverview key={project.id} project={project} />
+			<ProjectOverview key={project.id} project={project} userTeam={this.state.userTeam} />
 		);
+	}
+
+	/**
+	 *
+	 */
+	generateItemClickHandler (project) {
+		return (e) => {
+			AppActions.selectProject(project);
+		}
 	}
 
 	/**
@@ -121,23 +141,7 @@ export default class Projects extends Component {
 	/**
 	 *
 	 */
-	onProjectStoreChange () {
+	onStoreChange () {
 		this.setState(getState());
-	}
-
-	/**
-	 *
-	 */
-	onClick () {
-		AppActions.dumpStore('Project');
-	}
-
-	/**
-	 *
-	 */
-	createOnProjectClickHandler (project) {
-		return (e) => {
-			AppActions.selectProject(project);
-		};
 	}
 }
