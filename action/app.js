@@ -211,5 +211,49 @@ export default {
 		TeamApi.createTeam(team)
 		.done(ServerActions.createTeamSuccess)
 		.fail(ServerActions.fail);
+	},
+
+	/**
+	 *
+	 */
+	deleteTeam (team) {
+		AppDispatcher.dispatch({
+			actionType: Constant.DELETE_TEAM_ATTEMPT,
+			team
+		});
+
+		TeamApi.deleteTeam(team)
+		.done(ServerActions.deleteTeamSuccess)
+		.fail(ServerActions.deleteTeamFail);
+	},
+
+	/**
+	 *
+	 */
+	joinTeam (user, team) {
+		AppDispatcher.dispatch({
+			actionType: Constant.JOIN_TEAM_ATTEMPT,
+			user,
+			team
+		});
+
+		TeamApi.joinTeam(user, team)
+		.done(ServerActions.joinTeamSuccess)
+		.fail(ServerActions.joinTeamFail);
+	},
+
+	/**
+	 *
+	 */
+	leaveTeam (user, team) {
+		AppDispatcher.dispatch({
+			actionType: Constant.LEAVE_TEAM_ATTEMPT,
+			user,
+			team
+		});
+
+		TeamApi.leaveTeam(user, team)
+		.done(ServerActions.leaveTeamSuccess)
+		.fail(ServerActions.leaveTeamFail);
 	}
 };

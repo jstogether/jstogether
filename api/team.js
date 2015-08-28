@@ -14,5 +14,32 @@ export default {
 	 */
 	createTeam (team) {
 		return $.post(`/team/`, team);
+	},
+
+	/**
+	 *
+	 */
+	deleteTeam (team) {
+		return $.ajax(`/team/${team.id}/`, {
+			method: 'DELETE'
+		});
+	},
+
+	/**
+	 *
+	 */
+	joinTeam (user, team) {
+		return $.ajax(`/team/${team.id}/join`, {
+			method: 'PUT'
+		});
+	},
+
+	/**
+	 *
+	 */
+	leaveTeam (user, team) {
+		return $.ajax(`/team/${team.id}/leave`, {
+			method: 'PUT'
+		});
 	}
 }
