@@ -3,14 +3,27 @@ import Component from './component';
 
 import UserShort from './userShort';
 import UserStore from '../store/user';
+import SessionStore from '../store/session';
 
 export default class Team extends Component {
 	/**
 	 *
 	 */
+	constructor () {
+		super();
+
+		this._bind(
+			'renderJoinLeaveButton'
+		);
+	}
+
+	/**
+	 *
+	 */
 	render () {
-		let team = this.props.team;
-		let users = UserStore.getMulti(team.users).map(user => <UserShort user={user} />);
+		const team = this.props.team;
+		const users = UserStore.getMulti(team.users).map(user => <UserShort user={user} />);
+		const button = this.renderJoinLeaveButton();
 
 		return (
 			<div className='team'>
@@ -29,7 +42,30 @@ export default class Team extends Component {
 						</tr>
 					</tbody>
 				</table>
+
+				{button}
 			</div>
 		);
+	}
+
+	/**
+	 *
+	 */
+	renderJoinLeaveButton () {
+		let button;
+
+		if (this.props.canJoin) {
+			button = (
+				<button onClick={this.onJoinTeamClick}>{'Join Team'}</button>
+			);
+		}
+
+		if (this.props.canLeave) {
+			button = (
+				<button onClick={this.onLeaveTeamClick}>{'Leave Team'}</button>
+			);
+		}
+		
+		return button;
 	}
 }
