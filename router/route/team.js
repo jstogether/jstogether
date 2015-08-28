@@ -49,20 +49,20 @@ router.route('/:teamId/join')
 	console.log(`PUT to /team/${req.params.teamId}/join`);
 	console.log(req.user.username);
 
-	const query = {
-		_id: req.params.teamId
-	};
-
 	const update = {
 		$push: {
 			users: req.user.username
 		}
 	};
 
-	Team.update(query, update, (err) => {
+	const options = {
+		new: true
+	};
+
+	Team.findByIdAndUpdate(req.params.teamId, update, options, (err, team) => {
 		if (err) return res.status(500).send(err);
 
-		return res.sendStatus(200);
+		return res.send(team.toClient());
 	});
 });
 
@@ -74,21 +74,20 @@ router.route('/:teamId/leave')
 	console.log(`PUT to /team/${req.params.teamId}/leave`);
 	console.log(req.user.username);
 
-	const query = {
-		_id: req.params.teamId,
-		users: req.user.username
-	};
-
 	const update = {
 		$pull: {
 			users: req.user.username
 		}
 	};
 
-	Team.update(query, update, (err) => {
+	const options = {
+		new: true
+	};
+
+	Team.findByIdAndUpdate(req.params.teamId, update, options, (err, team) => {
 		if (err) return res.status(500).send(err);
 
-		return res.sendStatus(200);
+		return res.send(team.toClient());
 	});
 });
 
@@ -96,17 +95,31 @@ router.route('/:teamId/leave')
  *
  */
 router.route('/:teamId')
+.put((req, res) => {
+	console.log(`PUT to /team/${req.params.teamId}`);
+	console.log(req.body);
+
+	const update = {
+		$set: req.body
+	};
+
+	const options = {
+		new: true
+	};
+
+	Team.findByIdAndUpdate(req.params.teamId, update, options, (err, team) => {
+		if (err) return res.status(500).send(err);
+
+		return res.send(team.toClient());
+	});
+})
 .delete((req, res) => {
 	console.log(`DELETE to /team/${req.params.teamId}`);
 
-	const query = {
-		_id: req.params.teamId
-	};
-
-	Team.remove(query, (err) => {
+	Team.findByIdAndRemove(req.params.teamId, (err, team) => {
 		if (err) return res.status(500).send(err);
 
-		return res.send({id: req.params.teamId});
+		return res.send(team.toClient());
 	});
 });
 
