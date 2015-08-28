@@ -15,6 +15,14 @@ const TeamSchema = new Schema({
 	users: {
 		type: [String],
 		default: []
+	},
+	githubUrl: {
+		type: String,
+		default: '<none>'
+	},
+	deployedUrl: {
+		type: String,
+		default: '<none>'
 	}
 });
 
@@ -27,7 +35,9 @@ TeamSchema.methods.toClient = function () {
 		id: this._id,
 		name: this.name,
 		users: this.users,
-		projectId: this.projectId
+		projectId: this.projectId,
+		githubUrl: this.githubUrl,
+		deployedUrl: this.deployedUrl
 	};
 
 	return project;
