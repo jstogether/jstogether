@@ -1,13 +1,12 @@
-import React from 'react'
-import Component from './component';
+import React from 'react';
+import Page from './page';
 
 import AppActions from '../action/app';
 
-import ProjectOverview from './projectOverview';
-import CreateProject from './createProject';
-
 import ProjectStore from '../store/project';
 import SessionStore from '../store/session';
+
+import ProjectOverview from './projectOverview';
 
 function getState () {
 	return {
@@ -16,7 +15,7 @@ function getState () {
 	};
 }
 
-export default class Projects extends Component {
+export default class Projects extends Page {
 	/**
 	 *
 	 */
@@ -24,9 +23,12 @@ export default class Projects extends Component {
 		super();
 
 		this._bind(
-			'renderCurrentProject',
-			'onProjectStoreChange',
-			'onCreateProjectClick'
+			'renderHeaderItem',
+			'renderItem',
+			'renderContent',
+			'generateItemClickHandler',
+			'onCreateProjectClick',
+			'onStoreChange'
 		);
 
 		this.state = getState();
@@ -36,58 +38,53 @@ export default class Projects extends Component {
 	 *
 	 */
 	componentDidMount () {
-		ProjectStore.addChangeListener(this.onProjectStoreChange);
+		ProjectStore.addChangeListener(this.onStoreChange);
 	}
 
 	/**
 	 *
 	 */
 	componentWillUnmount () {
-		ProjectStore.removeChangeListener(this.onProjectStoreChange);
+		ProjectStore.removeChangeListener(this.onStoreChange);
 	}
 
 	/**
 	 *
 	 */
 	render () {
-		const currentProject = this.state.currentProject;
-		const renderedProject = this.renderCurrentProject();
-		const createProjectBtn = SessionStore.isAdmin() ? <button onClick={this.onCreateProjectClick}>{'New'}</button> : null;
-		
-		const projectList = this.state.projects.map((project, i) => {
-			const selectedProject = project === currentProject ? ' selected' : '';
-
-			return (
-				<li key={i} className={'itemShort' + selectedProject} onClick={this.createOnProjectClickHandler(project)}>
-					<span>{project.name}</span>
-				</li>
-			);
+		return this.renderPage({
+			items: this.state.projects,
+			selectedItem: this.state.currentProject
 		});
+	}
 
+	/**
+	 *
+	 */
+	renderHeaderItem () {
+		const createProjectBtn = SessionStore.isAdmin() ?
+			<button onClick={this.onCreateProjectClick}>{'New'}</button> :
+			null;
+
+		return [
+			<span>{'Projects'}</span>,
+			{createProjectBtn}
+		];
+	}
+
+	/**
+	 *
+	 */
+	renderItem (project) {
 		return (
-			<div className='pageContainer'>
-				<div className='listContainer'>
-					<ul className='list' onClick={this.onProjectClick}>
-						<li className='itemShort rootItem' onClick={this.createOnProjectClickHandler(null)}>
-							<span>{'Projects'}</span>
-							{createProjectBtn}
-						</li>
-
-						{projectList}
-					</ul>
-				</div>
-
-				<div className={'contentContainer'}>
-					{renderedProject}
-				</div>
-			</div>
+			<span>{project.name}</span>
 		);
 	}
 
 	/**
 	 *
 	 */
-	renderCurrentProject () {
+	renderContent () {
 		const project = this.state.currentProject;
 
 		if (!project) {
@@ -112,6 +109,15 @@ export default class Projects extends Component {
 	/**
 	 *
 	 */
+	generateItemClickHandler (project) {
+		return (e) => {
+			AppActions.selectProject(project);
+		}
+	}
+
+	/**
+	 *
+	 */
 	onCreateProjectClick (e) {
 		e.stopPropagation();
 
@@ -121,23 +127,7 @@ export default class Projects extends Component {
 	/**
 	 *
 	 */
-	onProjectStoreChange () {
+	onStoreChange () {
 		this.setState(getState());
-	}
-
-	/**
-	 *
-	 */
-	onClick () {
-		AppActions.dumpStore('Project');
-	}
-
-	/**
-	 *
-	 */
-	createOnProjectClickHandler (project) {
-		return (e) => {
-			AppActions.selectProject(project);
-		};
 	}
 }
